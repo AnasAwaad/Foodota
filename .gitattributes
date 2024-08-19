@@ -61,3 +61,7 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Exclude CSS/Js assets files from languages
+Foodota.Web/wwwroot/assets/css/*.css linguist-vendored
+Foodota.Web/wwwroot/assets/js/*.js linguist-vendored
