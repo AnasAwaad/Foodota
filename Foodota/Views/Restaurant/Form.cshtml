@@ -1,4 +1,4 @@
-﻿@model RestaurantFormViewModel 
+﻿@model RestaurantFormViewModel
 
 <div class="d-flex flex-column flex-column-fluid container-fluid">
 	<!--begin::Toolbar-->
@@ -8,7 +8,6 @@
 			<!--begin::Title-->
 			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">Add Restaurant</h1>
 			<!--end::Title-->
-
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
 				<!--begin::Item-->
@@ -28,10 +27,9 @@
 		<!--end::Page title-->
 	</div>
 	<!--end::Toolbar-->
-
 	<!--begin::Post-->
 	<div class="content flex-column-fluid">
-		<form method="post" asp-action="Create" enctype="multipart/form-data" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework" >
+		<form method="post" asp-action="Create" enctype="multipart/form-data" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
 			<!--begin::Aside column-->
 			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
 				<!--begin::Thumbnail settings-->
@@ -45,7 +43,6 @@
 						<!--end::Card title-->
 					</div>
 					<!--end::Card header-->
-
 					<!--begin::Card body-->
 					<div class="card-body text-center pt-0">
 						<!--begin::Image input-->
@@ -63,14 +60,12 @@
 							}
 						</style>
 						<!--end::Image input placeholder-->
-
 						<!--begin::Image input-->
 						<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
-							
+
 							<!--begin::Preview existing avatar-->
 							<div class="image-input-wrapper w-150px h-150px"></div>
 							<!--end::Preview existing avatar-->
-
 							<!--begin::Label-->
 							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
 								<i class="fa-solid fa-pen"></i>
@@ -81,13 +76,11 @@
 								<!--end::Inputs-->
 							</label>
 							<!--end::Label-->
-
 							<!--begin::Cancel-->
 							<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" aria-label="Cancel avatar" data-bs-original-title="Cancel avatar" data-kt-initialized="1">
 								<i class="bi bi-x-lg"></i>
 							</span>
 							<!--end::Cancel-->
-
 							<!--begin::Remove-->
 							<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" aria-label="Remove avatar" data-bs-original-title="Remove avatar" data-kt-initialized="1">
 								<i class="bi bi-x-lg"></i>
@@ -95,7 +88,6 @@
 							<!--end::Remove-->
 						</div>
 						<!--end::Image input-->
-
 						<!--begin::Description-->
 						<div class="text-muted fs-7">Set the restaurant logo. Only *.png, *.jpg and *.jpeg image files are accepted</div>
 						<!--end::Description-->
@@ -107,7 +99,6 @@
 				<!--end::Thumbnail settings-->
 			</div>
 			<!--end::Aside column-->
-
 			<!--begin::Main column-->
 			<div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
 				<!--begin::General options-->
@@ -119,7 +110,6 @@
 						</div>
 					</div>
 					<!--end::Card header-->
-
 					<!--begin::Card body-->
 					<div class="card-body pt-0">
 
@@ -171,17 +161,16 @@
 							<span asp-validation-for="Name" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
 						</div>
 						<!--end::Input group-->
-
 						<!--begin::Input group-->
 						<div>
-							
+
 							<div class="mb-5 fv-row fv-plugins-icon-container">
 								<label class="required form-label" asp-for="Description"></label>
 								<textarea asp-for="Description" class="form-control mb-2" placeholder="Enter description for restaurant..."></textarea>
-								
+
 								<span asp-validation-for="Description" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
 							</div>
-							
+
 						</div>
 						<!--end::Input group-->
 						<!--begin::Input group-->
@@ -189,7 +178,7 @@
 							<div class="mb-5 fv-row fv-plugins-icon-container">
 								<label class="required form-label" asp-for="Address"></label>
 								<textarea asp-for="Address" class="form-control mb-2" placeholder="Enter Address for restaurant..."></textarea>
-								
+
 								<span asp-validation-for="Address" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
 							</div>
 
@@ -199,14 +188,48 @@
 					<!--end::Card header-->
 				</div>
 				<!--end::General options-->
-				
+
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<div class="card-title">
+							<h2>Opening Hours</h2>
+						</div>
+					</div>
+					<!--end::Card header-->
+					<div class="card-body">
+						@foreach (var item in Model.weekDays)
+						{
+							<div class="row mb-5">
+								<div class="col-md-3 mt-3">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" value="@item.Name" id="@(item.Name)-day">
+										<label class="form-check-label" for="@(item.Name)-day">
+											@item.Name
+										</label>
+									</div>
+								</div>
+								<div class="col-md-6 row js-opening-time" id="@(item.Name)-time" data-day="@item.Id">
+									<div class="mb-0 col-md-3 w-50">
+										<input class="form-control form-control-solid flatpickr-input active js-flatpickr js-from" placeholder="From" type="text" readonly="readonly">
+									</div>
+									<div class="mb-0 col-md-3 w-50">
+										<input class="form-control form-control-solid flatpickr-input active js-flatpickr js-to" placeholder="To" type="text" readonly="readonly">
+									</div>
+								</div>
+								<div class="d-none col-3 mt-3">Closed</div>
+
+							</div>
+						}
+					</div>
+				</div>
+
 				<div class="d-flex justify-content-end">
 					<!--begin::Button-->
 					<a href="/metronic8/demo14/apps/ecommerce/catalog/products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5"> Cancel </a>
 					<!--end::Button-->
-
 					<!--begin::Button-->
-					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
+					<button type="button" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
 						<span class="indicator-label"> Create </span>
 						<span class="indicator-progress">
 							Please wait...
@@ -220,7 +243,6 @@
 		</form>
 	</div>
 	<!--end::Post-->
-
 	<!--begin::Footer-->
 	<div class="footer py-4 d-flex flex-column flex-md-row flex-stack" id="kt_footer">
 		<!--begin::Copyright-->
@@ -229,7 +251,6 @@
 			<a href="https://keenthemes.com" target="_blank" class="text-gray-800 text-hover-primary">Keenthemes</a>
 		</div>
 		<!--end::Copyright-->
-
 		<!--begin::Menu-->
 		<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
 			<li class="menu-item">
@@ -250,5 +271,55 @@
 </div>
 
 @section Scripts {
-	<partial name="_ValidationScriptsPartial"/>
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		// Function to update the visibility based on checkbox state
+		function updateVisibility() {
+			$(".form-check-input").each(function () {
+				var openingTime = $("#" + $(this).val() + "-time");
+
+				if (this.checked) {
+					openingTime.removeClass("d-none");
+					openingTime.next().addClass("d-none");
+				} else {
+					openingTime.addClass("d-none");
+					openingTime.next().removeClass("d-none");
+				}
+			});
+		}
+
+		// Run the function on page load to set the initial state
+		$(document).ready(function () {
+
+			$(".js-flatpickr").flatpickr({
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: "H:i",
+			});
+
+			updateVisibility();
+		});
+
+		$('#kt_ecommerce_add_category_submit').on('click', function () {
+			var arr=[];
+			$(".form-check-input").each(function () {
+				var openingTime = $(this).parents('.row').find('.js-opening-time');
+
+				if (this.checked) {
+					arr.push({
+						"day": openingTime.data('day'),
+						"from": openingTime.find('.js-from').val(),
+						"to": openingTime.find('.js-to').val()
+					});
+				}
+
+				
+			});
+		})
+
+		// Attach event handler to checkboxes
+		$(document).on('change', '.form-check-input', function () {
+			updateVisibility();
+		});
+	</script>
 }

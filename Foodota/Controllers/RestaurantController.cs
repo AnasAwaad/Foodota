@@ -27,7 +27,11 @@ public class RestaurantController : Controller
 	[HttpGet]
 	public IActionResult Create()
 	{
-		return View("Form");
+		var viewModel = new RestaurantFormViewModel()
+		{
+			weekDays = _context.WeekDays.ToList()
+		};
+		return View("Form",viewModel);
 	}
 
 	[HttpPost]
@@ -62,5 +66,12 @@ public class RestaurantController : Controller
 		_context.SaveChanges();
 
 		return RedirectToAction(nameof(Index));
+	}
+
+
+	public IActionResult AddOpeningHours(int id)
+	{
+
+		return Ok();
 	}
 }
