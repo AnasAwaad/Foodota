@@ -1,0 +1,254 @@
+﻿@model RestaurantFormViewModel 
+
+<div class="d-flex flex-column flex-column-fluid container-fluid">
+	<!--begin::Toolbar-->
+	<div class="toolbar mb-5 mb-lg-7">
+		<!--begin::Page title-->
+		<div class="page-title d-flex flex-column me-3">
+			<!--begin::Title-->
+			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">Add Restaurant</h1>
+			<!--end::Title-->
+
+			<!--begin::Breadcrumb-->
+			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-gray-600">
+					<a asp-action="Index" asp-controller="Home" class="text-gray-600 text-hover-primary">Home</a>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-gray-600">Restaurant</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-gray-600">Create</li>
+				<!--end::Item-->
+			</ul>
+			<!--end::Breadcrumb-->
+		</div>
+		<!--end::Page title-->
+	</div>
+	<!--end::Toolbar-->
+
+	<!--begin::Post-->
+	<div class="content flex-column-fluid">
+		<form method="post" asp-action="Create" enctype="multipart/form-data" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework" >
+			<!--begin::Aside column-->
+			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+				<!--begin::Thumbnail settings-->
+				<div class="card card-flush py-4">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card title-->
+						<div class="card-title">
+							<h2>Logo</h2>
+						</div>
+						<!--end::Card title-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body text-center pt-0">
+						<!--begin::Image input-->
+						<!--begin::Image input placeholder-->
+						<style>
+							.image-input-placeholder {
+								background-image: url("/assets/images/blank-image.svg");
+								background-position: center;
+								background-size: contain;
+							}
+
+
+							[data-bs-theme="dark"] .image-input-placeholder {
+								background-image: url("/assets/images/blank-image-dark.svg");
+							}
+						</style>
+						<!--end::Image input placeholder-->
+
+						<!--begin::Image input-->
+						<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
+							
+							<!--begin::Preview existing avatar-->
+							<div class="image-input-wrapper w-150px h-150px"></div>
+							<!--end::Preview existing avatar-->
+
+							<!--begin::Label-->
+							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
+								<i class="fa-solid fa-pen"></i>
+
+								<!--begin::Inputs-->
+								<input type="file" asp-for="Logo" accept=".png, .jpg, .jpeg" />
+								<input type="hidden" name="avatar_remove" />
+								<!--end::Inputs-->
+							</label>
+							<!--end::Label-->
+
+							<!--begin::Cancel-->
+							<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" aria-label="Cancel avatar" data-bs-original-title="Cancel avatar" data-kt-initialized="1">
+								<i class="bi bi-x-lg"></i>
+							</span>
+							<!--end::Cancel-->
+
+							<!--begin::Remove-->
+							<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" aria-label="Remove avatar" data-bs-original-title="Remove avatar" data-kt-initialized="1">
+								<i class="bi bi-x-lg"></i>
+							</span>
+							<!--end::Remove-->
+						</div>
+						<!--end::Image input-->
+
+						<!--begin::Description-->
+						<div class="text-muted fs-7">Set the restaurant logo. Only *.png, *.jpg and *.jpeg image files are accepted</div>
+						<!--end::Description-->
+						<span asp-validation-for="Logo" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+
+					</div>
+					<!--end::Card body-->
+				</div>
+				<!--end::Thumbnail settings-->
+			</div>
+			<!--end::Aside column-->
+
+			<!--begin::Main column-->
+			<div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+				<!--begin::General options-->
+				<div class="card card-flush py-4">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<div class="card-title">
+							<h2>General</h2>
+						</div>
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body pt-0">
+
+						<!--begin::Input group-->
+						<div class="mb-5 fv-row fv-plugins-icon-container">
+							<label class="required form-label" asp-for="ImageUrl"></label>
+
+							<!--begin::Image input-->
+							<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3 w-100" data-kt-image-input="true">
+								<!--begin::Preview existing avatar-->
+								<div class="image-input-wrapper w-100 h-300px" style="background-size:cover;background-position:center;"></div>
+								<!--end::Preview existing avatar-->
+								<!--begin::Label-->
+								<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
+									<i class="fa-solid fa-pen"></i>
+
+									<!--begin::Inputs-->
+									<input type="file" asp-for="ImageUrl" accept=".png, .jpg, .jpeg" />
+									<input type="hidden" name="avatar_remove" />
+									<!--end::Inputs-->
+								</label>
+								<!--end::Label-->
+								<!--begin::Cancel-->
+								<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" aria-label="Cancel avatar" data-bs-original-title="Cancel avatar" data-kt-initialized="1">
+									<i class="bi bi-x-lg"></i>
+								</span>
+								<!--end::Cancel-->
+								<!--begin::Remove-->
+								<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" aria-label="Remove avatar" data-bs-original-title="Remove avatar" data-kt-initialized="1">
+									<i class="bi bi-x-lg"></i>
+								</span>
+								<!--end::Remove-->
+							</div>
+							<!--begin::Description-->
+							<div class="text-muted fs-7">Set the restaurant banner. Only *.png, *.jpg and *.jpeg image files are accepted</div>
+							<!--end::Description-->
+							<span asp-validation-for="ImageUrl" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+
+						</div>
+						<!--end::Image input-->
+
+						<div class="mb-5 fv-row fv-plugins-icon-container">
+							<!--begin::Label-->
+							<label class="required form-label" asp-for="Name"></label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<input type="text" asp-for="Name" class="form-control mb-2" placeholder="Restaurant name" />
+							<!--end::Input-->
+							<span asp-validation-for="Name" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+						</div>
+						<!--end::Input group-->
+
+						<!--begin::Input group-->
+						<div>
+							
+							<div class="mb-5 fv-row fv-plugins-icon-container">
+								<label class="required form-label" asp-for="Description"></label>
+								<textarea asp-for="Description" class="form-control mb-2" placeholder="Enter description for restaurant..."></textarea>
+								
+								<span asp-validation-for="Description" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+							</div>
+							
+						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
+						<div>
+							<div class="mb-5 fv-row fv-plugins-icon-container">
+								<label class="required form-label" asp-for="Address"></label>
+								<textarea asp-for="Address" class="form-control mb-2" placeholder="Enter Address for restaurant..."></textarea>
+								
+								<span asp-validation-for="Address" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+							</div>
+
+						</div>
+						<!--end::Input group-->
+					</div>
+					<!--end::Card header-->
+				</div>
+				<!--end::General options-->
+				
+				<div class="d-flex justify-content-end">
+					<!--begin::Button-->
+					<a href="/metronic8/demo14/apps/ecommerce/catalog/products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5"> Cancel </a>
+					<!--end::Button-->
+
+					<!--begin::Button-->
+					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
+						<span class="indicator-label"> Create </span>
+						<span class="indicator-progress">
+							Please wait...
+							<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+						</span>
+					</button>
+					<!--end::Button-->
+				</div>
+			</div>
+			<!--end::Main column-->
+		</form>
+	</div>
+	<!--end::Post-->
+
+	<!--begin::Footer-->
+	<div class="footer py-4 d-flex flex-column flex-md-row flex-stack" id="kt_footer">
+		<!--begin::Copyright-->
+		<div class="text-gray-900 order-2 order-md-1">
+			<span class="text-muted fw-semibold me-1">2024©</span>
+			<a href="https://keenthemes.com" target="_blank" class="text-gray-800 text-hover-primary">Keenthemes</a>
+		</div>
+		<!--end::Copyright-->
+
+		<!--begin::Menu-->
+		<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+			<li class="menu-item">
+				<a href="https://keenthemes.com" target="_blank" class="menu-link px-2">About</a>
+			</li>
+
+			<li class="menu-item">
+				<a href="https://devs.keenthemes.com" target="_blank" class="menu-link px-2">Support</a>
+			</li>
+
+			<li class="menu-item">
+				<a href="https://1.envato.market/EA4JP" target="_blank" class="menu-link px-2">Purchase</a>
+			</li>
+		</ul>
+		<!--end::Menu-->
+	</div>
+	<!--end::Footer-->
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"/>
+}
