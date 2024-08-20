@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foodota.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240819151628_AddRestaurant_OpeningHours_WeekDayTables")]
+    [Migration("20240820082956_AddRestaurant_OpeningHours_WeekDayTables")]
     partial class AddRestaurant_OpeningHours_WeekDayTables
     {
         /// <inheritdoc />
@@ -33,14 +33,16 @@ namespace Foodota.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("From")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("To")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WeekDayId")
                         .HasColumnType("int");
@@ -109,9 +111,10 @@ namespace Foodota.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 

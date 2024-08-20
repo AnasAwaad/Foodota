@@ -37,7 +37,7 @@ namespace Foodota.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", maxLength: 25, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +50,8 @@ namespace Foodota.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    From = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    To = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    From = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    To = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WeekDayId = table.Column<int>(type: "int", nullable: false),
                     RestaurantId = table.Column<int>(type: "int", nullable: false)
                 },

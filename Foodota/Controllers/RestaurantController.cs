@@ -4,6 +4,7 @@ using Foodota.Core.ViewModels;
 using Foodota.Data;
 using Foodota.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Dynamic.Core;
 
 namespace Foodota.Controllers;
 public class RestaurantController : Controller
@@ -59,19 +60,48 @@ public class RestaurantController : Controller
 			return View("Form", viewModel) ;
 		}
 		var model = _mapper.Map<Restaurant>(viewModel);
-		model.ImageUrl = imageName;
-		model.Logo = logoName;
+		model.ImageUrl = "/images/restaurant/banner/"+imageName;
+		model.Logo = "/images/restaurant/logo/" + logoName;
 
 		_context.Restaurants.Add(model);
 		_context.SaveChanges();
 
-		return RedirectToAction(nameof(Index));
+		return Ok(model.Id);
 	}
 
-
-	public IActionResult AddOpeningHours(int id)
+	[HttpPost]
+	public IActionResult AddOpeningHours([FromBody]OpeningHoursRequest request)
 	{
+		if(request.OpeningHours is null){
+			return BadRequest();
+		}
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
 
-		return Ok();
+	[HttpPost]
+	public IActionResult GetRestaurants()
+	{
+		var skip = Convert.ToInt32(Request.Form["start"]);
+		var pageSize = Convert.ToInt32(Request.Form["length"]);
+		var orderColumnIndex = Convert.ToInt32(Request.Form["order[0][column]"]);
+		var orderColumnName = Request.Form[$"columns[{orderColumnIndex}][name]"];
+		var orderColumnDirection = Request.Form["order[0][dir]"];
+		var searchValue = Request.Form["search[value]"];
+
+
+		IQueryable<Restaurant> restaurants = _context.Restaurants;
+
+		if (!string.IsNullOrEmpty(searchValue))
+			restaurants = restaurants.Where(b => b.Name.Contains(searchValue!) || b.Description.Contains(searchValue!));
+
+		restaurants = restaurants.OrderBy($"{orderColumnName} {orderColumnDirection}");  //orderBy from system.Linq.Dynamic lib
+
+		var data = restaurants.Skip(skip).Take(pageSize).ToList();
+		var restaurantVM = _mapper.Map<IEnumerable<RestaurantViewModel>>(data);
+		var recordsTotal = restaurants.Count();
+
+		return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = restaurantVM });
 	}
 }

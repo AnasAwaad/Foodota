@@ -29,7 +29,14 @@
 	<!--end::Toolbar-->
 	<!--begin::Post-->
 	<div class="content flex-column-fluid">
-		<form method="post" asp-action="Create" enctype="multipart/form-data" class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework">
+		<form method="post" 
+			  asp-action="Create" 
+			  enctype="multipart/form-data" 
+			  class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
+			  data-ajax="true"
+			  data-ajax-method="post"
+			  data-ajax-success="OnSuccessSubmit"
+			  data-ajax-failure="ShowErrorMessage">
 			<!--begin::Aside column-->
 			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
 				<!--begin::Thumbnail settings-->
@@ -203,18 +210,18 @@
 							<div class="row mb-5">
 								<div class="col-md-3 mt-3">
 									<div class="form-check">
-										<input class="form-check-input" type="checkbox" value="@item.Name" id="@(item.Name)-day">
+										<input class="form-check-input" checked="true" type="checkbox" value="@item.Id" data-day="@item.Name" id="@(item.Name)-day">
 										<label class="form-check-label" for="@(item.Name)-day">
 											@item.Name
 										</label>
 									</div>
 								</div>
-								<div class="col-md-6 row js-opening-time" id="@(item.Name)-time" data-day="@item.Id">
+								<div class="col-md-6 row js-opening-time" id="@(item.Name)-opening-time">
 									<div class="mb-0 col-md-3 w-50">
-										<input class="form-control form-control-solid flatpickr-input active js-flatpickr js-from" placeholder="From" type="text" readonly="readonly">
+										<input class="form-control form-control-solid flatpickr-input active js-flatpickr-from" placeholder="From" type="text" readonly="readonly">
 									</div>
 									<div class="mb-0 col-md-3 w-50">
-										<input class="form-control form-control-solid flatpickr-input active js-flatpickr js-to" placeholder="To" type="text" readonly="readonly">
+										<input class="form-control form-control-solid flatpickr-input active js-flatpickr-to" placeholder="To" type="text" readonly="readonly">
 									</div>
 								</div>
 								<div class="d-none col-3 mt-3">Closed</div>
@@ -229,7 +236,7 @@
 					<a href="/metronic8/demo14/apps/ecommerce/catalog/products.html" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5"> Cancel </a>
 					<!--end::Button-->
 					<!--begin::Button-->
-					<button type="button" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
+					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
 						<span class="indicator-label"> Create </span>
 						<span class="indicator-progress">
 							Please wait...
@@ -276,8 +283,8 @@
 		// Function to update the visibility based on checkbox state
 		function updateVisibility() {
 			$(".form-check-input").each(function () {
-				var openingTime = $("#" + $(this).val() + "-time");
-
+				var openingTimeId = $(this).parents('.row').find(".js-opening-time").attr('id');
+				var openingTime = $('#' + openingTimeId);
 				if (this.checked) {
 					openingTime.removeClass("d-none");
 					openingTime.next().addClass("d-none");
@@ -287,39 +294,67 @@
 				}
 			});
 		}
+		
 
 		// Run the function on page load to set the initial state
 		$(document).ready(function () {
 
-			$(".js-flatpickr").flatpickr({
+			$(".js-flatpickr-from").flatpickr({
 				enableTime: true,
 				noCalendar: true,
 				dateFormat: "H:i",
+				defaultDate: "09:00"
+			});
+
+			$(".js-flatpickr-to").flatpickr({
+				enableTime: true,
+				noCalendar: true,
+				dateFormat: "H:i",
+				defaultDate: "23:00"
 			});
 
 			updateVisibility();
 		});
 
-		$('#kt_ecommerce_add_category_submit').on('click', function () {
-			var arr=[];
-			$(".form-check-input").each(function () {
-				var openingTime = $(this).parents('.row').find('.js-opening-time');
-
-				if (this.checked) {
-					arr.push({
-						"day": openingTime.data('day'),
-						"from": openingTime.find('.js-from').val(),
-						"to": openingTime.find('.js-to').val()
-					});
-				}
-
-				
-			});
-		})
-
+		
 		// Attach event handler to checkboxes
 		$(document).on('change', '.form-check-input', function () {
 			updateVisibility();
 		});
+		function OnSuccessSubmit(RestaurantId) {
+			var OpeningHours = [];
+
+			$(".form-check-input").each(function () {
+				var openingTime = $(this).parents('.row').find('.js-opening-time');
+				if (this.checked) {
+					OpeningHours.push({
+						"WeekDayId": $(this).val(),
+						"From": openingTime.find('.js-flatpickr-from').val(),
+						"To": openingTime.find('.js-flatpickr-to').val(),
+						"RestaurantId": RestaurantId
+					});
+				}
+
+
+			});
+
+			$.ajax({
+				url: "/Restaurant/AddOpeningHours",
+				contentType: "application/json;charset=utf-8",
+				type: "post",
+				dataType: "JSON",
+				data: JSON.stringify({ OpeningHours: OpeningHours }),
+				success: function (res) {
+					console.log('Success:', res);
+					window.location.href = "/Restaurant/Index";
+				},
+				error: function (xhr, status, error) {
+					console.error('Error:', status, error);
+				}
+			});
+		}
+		function ShowErrorMessage() {
+
+		}
 	</script>
 }

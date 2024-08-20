@@ -30,14 +30,16 @@ namespace Foodota.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("From")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("To")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WeekDayId")
                         .HasColumnType("int");

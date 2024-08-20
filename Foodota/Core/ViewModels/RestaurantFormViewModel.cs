@@ -16,5 +16,5 @@ public class RestaurantFormViewModel
 
 	[ValidateNever]
 	public IList<WeekDay> weekDays { get; set; }=new List<WeekDay>();
-	public ICollection<OpeningHour> OpeningHours { get; set; }=new List<OpeningHour>();
+	public ICollection<OpeningHour>? OpeningHours { get; set; }=new List<OpeningHour>();
 }

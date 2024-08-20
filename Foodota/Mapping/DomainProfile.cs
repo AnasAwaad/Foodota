@@ -9,5 +9,6 @@ public class DomainProfile : Profile
     public DomainProfile()
     {
         CreateMap<RestaurantFormViewModel, Restaurant>();
+        CreateMap<Restaurant, RestaurantViewModel>().ReverseMap();
     }
 }
