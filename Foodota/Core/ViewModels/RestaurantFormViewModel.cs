@@ -10,11 +10,13 @@ public class RestaurantFormViewModel
 	public string Name { get; set; } = null!;
 	public string Description { get; set; } = null!;
 	[Display(Name="Image")]
-	public IFormFile ImageUrl { get; set; } = null!;
+	public IFormFile Image { get; set; } = null!;
+	public string? ImagePath { get; set; }
 	public IFormFile Logo { get; set; } = null!;
+	public string? LogoPath { get; set; } = null!;
 	public string Address { get; set; } = null!;
 
 	[ValidateNever]
 	public IList<WeekDay> weekDays { get; set; }=new List<WeekDay>();
-	public ICollection<OpeningHour>? OpeningHours { get; set; }=new List<OpeningHour>();
+	public IList<OpeningHour>? OpeningHours { get; set; }=new List<OpeningHour>();
 }

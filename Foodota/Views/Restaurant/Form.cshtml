@@ -6,7 +6,7 @@
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column me-3">
 			<!--begin::Title-->
-			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">Add Restaurant</h1>
+			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">@(Model.Id > 0 ? "Update" : "Add") Restaurant</h1>
 			<!--end::Title-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
@@ -19,7 +19,7 @@
 				<li class="breadcrumb-item text-gray-600">Restaurant</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-gray-600">Create</li>
+				<li class="breadcrumb-item text-gray-600">@(Model.Id > 0 ? "Update" : "Create")</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -29,8 +29,7 @@
 	<!--end::Toolbar-->
 	<!--begin::Post-->
 	<div class="content flex-column-fluid">
-		<form method="post" 
-			  asp-action="Create" 
+		<form method="post"  
 			  enctype="multipart/form-data" 
 			  class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
 			  data-ajax="true"
@@ -52,6 +51,7 @@
 					<!--end::Card header-->
 					<!--begin::Card body-->
 					<div class="card-body text-center pt-0">
+
 						<!--begin::Image input-->
 						<!--begin::Image input placeholder-->
 						<style>
@@ -67,11 +67,15 @@
 							}
 						</style>
 						<!--end::Image input placeholder-->
+						@if (Model.Id > 0)
+						{
+							<input type="hidden" asp-for="Id"/>
+						}
 						<!--begin::Image input-->
 						<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
 
 							<!--begin::Preview existing avatar-->
-							<div class="image-input-wrapper w-150px h-150px"></div>
+							<div class="image-input-wrapper w-150px h-150px" style="background-image:@(Model.Id > 0 ?$"url({Model.LogoPath})":string.Empty)" ></div>
 							<!--end::Preview existing avatar-->
 							<!--begin::Label-->
 							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
@@ -122,19 +126,19 @@
 
 						<!--begin::Input group-->
 						<div class="mb-5 fv-row fv-plugins-icon-container">
-							<label class="required form-label" asp-for="ImageUrl"></label>
+							<label class="required form-label" asp-for="Image"></label>
 
 							<!--begin::Image input-->
 							<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3 w-100" data-kt-image-input="true">
 								<!--begin::Preview existing avatar-->
-								<div class="image-input-wrapper w-100 h-300px" style="background-size:cover;background-position:center;"></div>
+								<div class="image-input-wrapper w-100 h-300px" style="background-image:@(Model.Id > 0 ?$"url({Model.ImagePath})":string.Empty);background-size:cover;background-position:center;" style=""></div>
 								<!--end::Preview existing avatar-->
 								<!--begin::Label-->
 								<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
 									<i class="fa-solid fa-pen"></i>
 
 									<!--begin::Inputs-->
-									<input type="file" asp-for="ImageUrl" accept=".png, .jpg, .jpeg" />
+									<input type="file" asp-for="Image" accept=".png, .jpg, .jpeg" />
 									<input type="hidden" name="avatar_remove" />
 									<!--end::Inputs-->
 								</label>
@@ -153,7 +157,7 @@
 							<!--begin::Description-->
 							<div class="text-muted fs-7">Set the restaurant banner. Only *.png, *.jpg and *.jpeg image files are accepted</div>
 							<!--end::Description-->
-							<span asp-validation-for="ImageUrl" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+							<span asp-validation-for="Image" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
 
 						</div>
 						<!--end::Image input-->
@@ -205,6 +209,8 @@
 					</div>
 					<!--end::Card header-->
 					<div class="card-body">
+
+						
 						@foreach (var item in Model.weekDays)
 						{
 							<div class="row mb-5">
@@ -237,7 +243,7 @@
 					<!--end::Button-->
 					<!--begin::Button-->
 					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
-						<span class="indicator-label"> Create </span>
+						<span class="indicator-label"> @(Model.Id > 0 ? "Update" : "Create") </span>
 						<span class="indicator-progress">
 							Please wait...
 							<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -280,25 +286,54 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 	<script>
-		// Function to update the visibility based on checkbox state
-		function updateVisibility() {
-			$(".form-check-input").each(function () {
-				var openingTimeId = $(this).parents('.row').find(".js-opening-time").attr('id');
-				var openingTime = $('#' + openingTimeId);
-				if (this.checked) {
-					openingTime.removeClass("d-none");
-					openingTime.next().addClass("d-none");
-				} else {
-					openingTime.addClass("d-none");
-					openingTime.next().removeClass("d-none");
-				}
-			});
-		}
-		
-
-		// Run the function on page load to set the initial state
 		$(document).ready(function () {
+			// Initialize the weekDays object with correct days
+			var weekDays = {
+				"Saturday": 0,
+				"Sunday": 0,
+				"Monday": 0,
+				"Tuesday": 0,
+				"Wednesday": 0,
+				"Thursday": 0,
+				"Friday": 0
+			};
 
+			// Retrieve restaurantId from hidden input
+			var restaurantId = $('#Id').val();
+
+			if (restaurantId) {
+				// Fetch opening hours from the server
+				$.ajax({
+					url: "/Restaurant/GetOpeningHours/" + restaurantId,
+					success: function (res) {
+						res.openingHours.forEach(function (item) {
+							// Set the checkbox and time inputs based on response
+							var checkBox = $("#" + item.day + "-day");
+							var openingTime = $("#" + item.day + "-opening-time");
+
+							weekDays[item.day] = 1;
+
+							openingTime.find('.js-flatpickr-from').val(item.from);
+							openingTime.find('.js-flatpickr-to').val(item.to);
+							checkBox.prop('checked', true); // Use prop instead of checked for consistency
+						});
+
+						// Update the visibility of time inputs based on weekDays object
+						Object.keys(weekDays).forEach(function (day) {
+							if (!weekDays[day]) {
+								$("#" + day + "-day").prop('checked', false);
+							}
+						});
+
+						updateVisibility();
+					},
+					error: function (xhr, status, error) {
+						console.error('Error fetching opening hours:', status, error);
+					}
+				});
+			}
+
+			// Initialize flatpickr for time inputs
 			$(".js-flatpickr-from").flatpickr({
 				enableTime: true,
 				noCalendar: true,
@@ -313,48 +348,60 @@
 				defaultDate: "23:00"
 			});
 
-			updateVisibility();
-		});
+			// Function to update the visibility of time inputs
+			function updateVisibility() {
+				$(".form-check-input").each(function () {
+					var openingTime = $(this).closest('.row').find(".js-opening-time");
+					if (this.checked) {
+						openingTime.removeClass("d-none");
+					} else {
+						openingTime.addClass("d-none");
+					}
+				});
+			}
 
-		
-		// Attach event handler to checkboxes
-		$(document).on('change', '.form-check-input', function () {
-			updateVisibility();
-		});
-		function OnSuccessSubmit(RestaurantId) {
-			var OpeningHours = [];
+			// Attach event handler to checkboxes
+			$(document).on('change', '.form-check-input', function () {
+				updateVisibility();
+			});
 
-			$(".form-check-input").each(function () {
-				var openingTime = $(this).parents('.row').find('.js-opening-time');
-				if (this.checked) {
+			// Handle form submission
+			window.OnSuccessSubmit = function (RestaurantId) {
+				var OpeningHours = [];
+
+				$(".form-check-input:checked").each(function () {
+					var openingTime = $(this).closest('.row').find('.js-opening-time');
 					OpeningHours.push({
 						"WeekDayId": $(this).val(),
 						"From": openingTime.find('.js-flatpickr-from').val(),
 						"To": openingTime.find('.js-flatpickr-to').val(),
 						"RestaurantId": RestaurantId
 					});
-				}
+				});
 
+				// Send opening hours to the server
+				$.ajax({
+					url: "/Restaurant/AddOpeningHours",
+					contentType: "application/json;charset=utf-8",
+					type: "POST",
+					dataType: "json",
+					data: JSON.stringify({ OpeningHours: OpeningHours }),
+					success: function (res) {
+						console.log('Success:', res);
+						window.location.href = "/Restaurant/Index";
+					},
+					error: function (xhr, status, error) {
+						console.error('Error submitting opening hours:', status, error);
+					}
+				});
+			};
 
-			});
-
-			$.ajax({
-				url: "/Restaurant/AddOpeningHours",
-				contentType: "application/json;charset=utf-8",
-				type: "post",
-				dataType: "JSON",
-				data: JSON.stringify({ OpeningHours: OpeningHours }),
-				success: function (res) {
-					console.log('Success:', res);
-					window.location.href = "/Restaurant/Index";
-				},
-				error: function (xhr, status, error) {
-					console.error('Error:', status, error);
-				}
-			});
-		}
-		function ShowErrorMessage() {
-
-		}
+			// Placeholder function for error messages (to be implemented as needed)
+			function ShowErrorMessage() {
+				// Implementation here
+				console.log("error")
+			}
+		});
 	</script>
+
 }

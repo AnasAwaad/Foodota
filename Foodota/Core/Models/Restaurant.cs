@@ -10,9 +10,9 @@ public class Restaurant : BaseModel
 	[StringLength(200)]
 	public string Description { get; set; } = null!;
     [StringLength(500)]
-    public string ImageUrl { get; set; } = null!;
+    public string ImagePath { get; set; } = null!;
 	[StringLength(500)]
-	public string Logo { get; set; }=null!;
+	public string LogoPath { get; set; }=null!;
 	[StringLength(100)]
 	public string Address { get; set; }=null!;
     public ICollection<OpeningHour> OpeningHours { get; set; } = new List<OpeningHour>();
