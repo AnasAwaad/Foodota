@@ -116,7 +116,7 @@ public class RestaurantController : Controller
 		var viewModel = _mapper.Map<RestaurantFormViewModel>(restaurant);
 		viewModel.weekDays = _context.WeekDays.ToList();
 
-		return View("Update",viewModel);
+		return View("Form",viewModel);
 	}
 
 

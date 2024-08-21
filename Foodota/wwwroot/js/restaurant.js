@@ -31,7 +31,7 @@ function OnSuccessSubmitCreate(restaurantId) {
 	});
 };
 
-function OnSuccessSubmitEdit() {
+function OnSuccessSubmitUpdate() {
 	var OpeningHours = [];
 	$(".js-checkbox-opening-time:checked").each(function () {
 		var openingTime = $(this).closest('.row').find('.js-opening-time');
