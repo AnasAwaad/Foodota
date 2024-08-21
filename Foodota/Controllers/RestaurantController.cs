@@ -42,8 +42,8 @@ public class RestaurantController : Controller
 	{
 		if (!ModelState.IsValid) return View("Form",viewModel);
 
-		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image.FileName)}";
-		var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo.FileName)}";
+		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";
+		var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo!.FileName)}";
 
 		var logoRes = _imageService.UploadImage(viewModel.Logo, logoName, "images/restaurant/logo", false);
 
@@ -82,6 +82,19 @@ public class RestaurantController : Controller
 		return Ok(Json("added successfully"));
 	}
 
+	public IActionResult UpdateOpeningHours([FromBody]OpeningHoursRequest request)
+	{
+		if(request.OpeningHours is null){
+			return BadRequest();
+		}
+		var openingHours=_context.OpeningHours.Where(o=>o.RestaurantId==request.OpeningHours.First().RestaurantId).ToList();
+
+		_context.OpeningHours.RemoveRange(openingHours);
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
+
 	public IActionResult GetOpeningHours(int id)
 	{
 		var openingHours = _context.OpeningHours.Include(o=>o.WeekDay).Where(o => o.RestaurantId == id).Select(o=>new 
@@ -103,14 +116,14 @@ public class RestaurantController : Controller
 		var viewModel = _mapper.Map<RestaurantFormViewModel>(restaurant);
 		viewModel.weekDays = _context.WeekDays.ToList();
 
-		return View("Form",viewModel);
+		return View("Update",viewModel);
 	}
 
 
 	
 	public IActionResult Update(RestaurantFormViewModel viewModel)
 	{
-		var restaurant = _context.Restaurants.Find(viewModel.Id);
+		var restaurant = _context.Restaurants.Find(viewModel.Id);	
 		if(restaurant is null)
 			return NotFound();
 
@@ -119,36 +132,39 @@ public class RestaurantController : Controller
 			var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image.FileName)}";
 
 
-			_imageService.DeleteImage(viewModel.ImagePath!);
-			var res=_imageService.UploadImage(viewModel.Image, imageName, "/images/restaurant/banner", false);
+			_imageService.DeleteImage(restaurant.ImagePath!);
+			var res=_imageService.UploadImage(viewModel.Image, imageName, "images/restaurant/banner", false);
 			if (!res.isUploaded)
 			{
 				ModelState.AddModelError("Image", res.errorMessage!);
-				return View("Form", viewModel);
+				return View("Update", viewModel);
 			}
 			viewModel.ImagePath = "/images/restaurant/banner/" + imageName;
 		}
+		else
+			viewModel.ImagePath = restaurant.ImagePath;
 
-		if (viewModel.Image is not null)
+		if (viewModel.Logo is not null)
 		{
 			var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo.FileName)}";
 
-			_imageService.DeleteImage(viewModel.LogoPath!);
-			var res = _imageService.UploadImage(viewModel.Logo, logoName, "/images/restaurant/logo", false);
+			_imageService.DeleteImage(restaurant.LogoPath!);
+			var res = _imageService.UploadImage(viewModel.Logo, logoName, "images/restaurant/logo", false);
 			if (!res.isUploaded)
 			{
 				ModelState.AddModelError("Logo", res.errorMessage!);
-				return View("Form", viewModel);
+				return View("Update", viewModel);
 			}
-			viewModel.ImagePath = "/images/restaurant/banner/" + logoName;
-		}
+			viewModel.LogoPath = "/images/restaurant/logo/" + logoName;
+		}else
+			viewModel.LogoPath = restaurant.LogoPath;
 
 
 		restaurant= _mapper.Map(viewModel, restaurant);
 
 		_context.Restaurants.Update(restaurant);
 		_context.SaveChanges();
-		return RedirectToAction(nameof(Index));
+		return Ok();
 
 	}
 

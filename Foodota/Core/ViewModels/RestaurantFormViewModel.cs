@@ -1,6 +1,8 @@
 ﻿using Foodota.Core.Models;
+using Foodota.Web.Core.Consts;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
 namespace Foodota.Core.ViewModels;
 
@@ -10,9 +12,13 @@ public class RestaurantFormViewModel
 	public string Name { get; set; } = null!;
 	public string Description { get; set; } = null!;
 	[Display(Name="Image")]
-	public IFormFile Image { get; set; } = null!;
+
+	[RequiredIf("Id==null",ErrorMessage =Errors.RequiredField)]
+	public IFormFile? Image { get; set; } = null!;
 	public string? ImagePath { get; set; }
-	public IFormFile Logo { get; set; } = null!;
+
+	[RequiredIf("Id==null", ErrorMessage = Errors.RequiredField)]
+	public IFormFile? Logo { get; set; } = null!;
 	public string? LogoPath { get; set; } = null!;
 	public string Address { get; set; } = null!;
 

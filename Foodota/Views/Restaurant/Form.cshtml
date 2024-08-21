@@ -6,7 +6,7 @@
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column me-3">
 			<!--begin::Title-->
-			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">@(Model.Id > 0 ? "Update" : "Add") Restaurant</h1>
+			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">Add Restaurant</h1>
 			<!--end::Title-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
@@ -19,7 +19,7 @@
 				<li class="breadcrumb-item text-gray-600">Restaurant</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-gray-600">@(Model.Id > 0 ? "Update" : "Create")</li>
+				<li class="breadcrumb-item text-gray-600">Create</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -34,7 +34,7 @@
 			  class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
 			  data-ajax="true"
 			  data-ajax-method="post"
-			  data-ajax-success="OnSuccessSubmit"
+			  data-ajax-success="OnSuccessSubmitCreate"
 			  data-ajax-failure="ShowErrorMessage">
 			<!--begin::Aside column-->
 			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
@@ -67,15 +67,11 @@
 							}
 						</style>
 						<!--end::Image input placeholder-->
-						@if (Model.Id > 0)
-						{
-							<input type="hidden" asp-for="Id"/>
-						}
 						<!--begin::Image input-->
 						<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
 
 							<!--begin::Preview existing avatar-->
-							<div class="image-input-wrapper w-150px h-150px" style="background-image:@(Model.Id > 0 ?$"url({Model.LogoPath})":string.Empty)" ></div>
+							<div class="image-input-wrapper w-150px h-150px" ></div>
 							<!--end::Preview existing avatar-->
 							<!--begin::Label-->
 							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
@@ -131,7 +127,7 @@
 							<!--begin::Image input-->
 							<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3 w-100" data-kt-image-input="true">
 								<!--begin::Preview existing avatar-->
-								<div class="image-input-wrapper w-100 h-300px" style="background-image:@(Model.Id > 0 ?$"url({Model.ImagePath})":string.Empty);background-size:cover;background-position:center;" style=""></div>
+								<div class="image-input-wrapper w-100 h-300px" style="background-size:cover;background-position:center;"></div>
 								<!--end::Preview existing avatar-->
 								<!--begin::Label-->
 								<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
@@ -216,7 +212,7 @@
 							<div class="row mb-5">
 								<div class="col-md-3 mt-3">
 									<div class="form-check">
-										<input class="form-check-input" checked="true" type="checkbox" value="@item.Id" data-day="@item.Name" id="@(item.Name)-day">
+										<input class="form-check-input js-checkbox-opening-time" checked="true" type="checkbox" value="@item.Id" data-day="@item.Name" id="@(item.Name)-day">
 										<label class="form-check-label" for="@(item.Name)-day">
 											@item.Name
 										</label>
@@ -243,7 +239,7 @@
 					<!--end::Button-->
 					<!--begin::Button-->
 					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
-						<span class="indicator-label"> @(Model.Id > 0 ? "Update" : "Create") </span>
+						<span class="indicator-label"> Create </span>
 						<span class="indicator-progress">
 							Please wait...
 							<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -285,123 +281,6 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
-	<script>
-		$(document).ready(function () {
-			// Initialize the weekDays object with correct days
-			var weekDays = {
-				"Saturday": 0,
-				"Sunday": 0,
-				"Monday": 0,
-				"Tuesday": 0,
-				"Wednesday": 0,
-				"Thursday": 0,
-				"Friday": 0
-			};
-
-			// Retrieve restaurantId from hidden input
-			var restaurantId = $('#Id').val();
-
-			if (restaurantId) {
-				// Fetch opening hours from the server
-				$.ajax({
-					url: "/Restaurant/GetOpeningHours/" + restaurantId,
-					success: function (res) {
-						res.openingHours.forEach(function (item) {
-							// Set the checkbox and time inputs based on response
-							var checkBox = $("#" + item.day + "-day");
-							var openingTime = $("#" + item.day + "-opening-time");
-
-							weekDays[item.day] = 1;
-
-							openingTime.find('.js-flatpickr-from').val(item.from);
-							openingTime.find('.js-flatpickr-to').val(item.to);
-							checkBox.prop('checked', true); // Use prop instead of checked for consistency
-						});
-
-						// Update the visibility of time inputs based on weekDays object
-						Object.keys(weekDays).forEach(function (day) {
-							if (!weekDays[day]) {
-								$("#" + day + "-day").prop('checked', false);
-							}
-						});
-
-						updateVisibility();
-					},
-					error: function (xhr, status, error) {
-						console.error('Error fetching opening hours:', status, error);
-					}
-				});
-			}
-
-			// Initialize flatpickr for time inputs
-			$(".js-flatpickr-from").flatpickr({
-				enableTime: true,
-				noCalendar: true,
-				dateFormat: "H:i",
-				defaultDate: "09:00"
-			});
-
-			$(".js-flatpickr-to").flatpickr({
-				enableTime: true,
-				noCalendar: true,
-				dateFormat: "H:i",
-				defaultDate: "23:00"
-			});
-
-			// Function to update the visibility of time inputs
-			function updateVisibility() {
-				$(".form-check-input").each(function () {
-					var openingTime = $(this).closest('.row').find(".js-opening-time");
-					if (this.checked) {
-						openingTime.removeClass("d-none");
-					} else {
-						openingTime.addClass("d-none");
-					}
-				});
-			}
-
-			// Attach event handler to checkboxes
-			$(document).on('change', '.form-check-input', function () {
-				updateVisibility();
-			});
-
-			// Handle form submission
-			window.OnSuccessSubmit = function (RestaurantId) {
-				var OpeningHours = [];
-
-				$(".form-check-input:checked").each(function () {
-					var openingTime = $(this).closest('.row').find('.js-opening-time');
-					OpeningHours.push({
-						"WeekDayId": $(this).val(),
-						"From": openingTime.find('.js-flatpickr-from').val(),
-						"To": openingTime.find('.js-flatpickr-to').val(),
-						"RestaurantId": RestaurantId
-					});
-				});
-
-				// Send opening hours to the server
-				$.ajax({
-					url: "/Restaurant/AddOpeningHours",
-					contentType: "application/json;charset=utf-8",
-					type: "POST",
-					dataType: "json",
-					data: JSON.stringify({ OpeningHours: OpeningHours }),
-					success: function (res) {
-						console.log('Success:', res);
-						window.location.href = "/Restaurant/Index";
-					},
-					error: function (xhr, status, error) {
-						console.error('Error submitting opening hours:', status, error);
-					}
-				});
-			};
-
-			// Placeholder function for error messages (to be implemented as needed)
-			function ShowErrorMessage() {
-				// Implementation here
-				console.log("error")
-			}
-		});
-	</script>
+	<script src="~/js/restaurant.js"></script>
 
 }
