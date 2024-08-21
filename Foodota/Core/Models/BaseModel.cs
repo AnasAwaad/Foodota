@@ -2,7 +2,13 @@
 
 public class BaseModel
 {
-	public bool IsActive { get; set; }
+
+    public BaseModel()
+    {
+        CreatedOn= DateTime.Now;
+        IsActive= true;
+    }
+    public bool IsActive { get; set; }
 	public DateTime CreatedOn { get; set; }
 	public DateTime? LastUpdatedOn { get; set; }
 
