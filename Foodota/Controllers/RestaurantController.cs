@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using Foodota.Core.Models;
-using Foodota.Core.ViewModels;
-using Foodota.Data;
-using Foodota.Web.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
-
-namespace Foodota.Controllers;
+﻿namespace Foodota.Controllers;
 public class RestaurantController : Controller
 {
 	private readonly IImageService _imageService;

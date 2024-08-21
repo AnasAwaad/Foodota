@@ -1,126 +1,4 @@
-﻿var restaurantId;
-
-// Handle form submission
-function OnSuccessSubmitCreate(restaurantId) {
-	var OpeningHours = [];
-
-	$(".js-checkbox-opening-time:checked").each(function () {
-		var openingTime = $(this).closest('.row').find('.js-opening-time');
-		OpeningHours.push({
-			"WeekDayId": $(this).val(),
-			"From": openingTime.find('.js-flatpickr-from').val(),
-			"To": openingTime.find('.js-flatpickr-to').val(),
-			"RestaurantId": restaurantId
-		});
-	});
-
-	// Send opening hours to the server
-	$.ajax({
-		url: "/Restaurant/AddOpeningHours",
-		contentType: "application/json;charset=utf-8",
-		type: "POST",
-		dataType: "json",
-		data: JSON.stringify({ OpeningHours: OpeningHours }),
-		success: function (res) {
-			console.log('Success:', res);
-			window.location.href = "/Restaurant/Index";
-		},
-		error: function (xhr, status, error) {
-			console.error('Error submitting opening hours:', status, error);
-		}
-	});
-};
-
-function OnSuccessSubmitUpdate() {
-	var OpeningHours = [];
-	$(".js-checkbox-opening-time:checked").each(function () {
-		var openingTime = $(this).closest('.row').find('.js-opening-time');
-		OpeningHours.push({
-			"WeekDayId": $(this).val(),
-			"From": openingTime.find('.js-flatpickr-from').val(),
-			"To": openingTime.find('.js-flatpickr-to').val(),
-			"RestaurantId": restaurantId
-		});
-	});
-
-	// Send opening hours to the server
-	$.ajax({
-		url: "/Restaurant/UpdateOpeningHours",
-		contentType: "application/json;charset=utf-8",
-		type: "POST",
-		dataType: "json",
-		data: JSON.stringify({ OpeningHours: OpeningHours }),
-		success: function (res) {
-			console.log('Success:', res);
-			window.location.href = "/Restaurant/Index";
-		},
-		error: function (xhr, status, error) {
-			console.error('Error submitting opening hours:', status, error);
-		}
-	});
-
-}
-
-
-$(document).ready(function () {
-	// Initialize the weekDays object with correct days
-	var weekDays = {
-		"Saturday": 0,
-		"Sunday": 0,
-		"Monday": 0,
-		"Tuesday": 0,
-		"Wednesday": 0,
-		"Thursday": 0,
-		"Friday": 0
-	};
-
-	// Retrieve restaurantId from hidden input
-	restaurantId = $('#Id').val();
-
-	if (restaurantId) {
-		// Fetch opening hours from the server
-		$.ajax({
-			url: "/Restaurant/GetOpeningHours/" + restaurantId,
-			success: function (res) {
-				res.openingHours.forEach(function (item) {
-					// Set the checkbox and time inputs based on response
-					var checkBox = $("#" + item.day + "-day");
-					var openingTime = $("#" + item.day + "-opening-time");
-
-					weekDays[item.day] = 1;
-
-					openingTime.find('.js-flatpickr-from').val(item.from);
-					openingTime.find('.js-flatpickr-to').val(item.to);
-					checkBox.prop('checked', true); // Use prop instead of checked for consistency
-				});
-
-				// Update the visibility of time inputs based on weekDays object
-				Object.keys(weekDays).forEach(function (day) {
-					if (!weekDays[day]) {
-						$("#" + day + "-day").prop('checked', false);
-					}
-				});
-
-				updateVisibility();
-			},
-			error: function (xhr, status, error) {
-				console.error('Error fetching opening hours:', status, error);
-			}
-		});
-	}
-
-
-
-	
-
-
-});
-
-
-
-
-"use strict";
-
+﻿
 // Handle Datatable
 var KTDatatablesServerSide = function () {
 	// Shared variables
@@ -134,7 +12,7 @@ var KTDatatablesServerSide = function () {
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "/Restaurant/GetRestaurants",
+				url: "/Category/GetCategories",
 				type: "POST"
 			},
 			columns: [
@@ -144,22 +22,20 @@ var KTDatatablesServerSide = function () {
 					"render": function (data, type, row) {
 						return `
 										<div class="symbol symbol-50px overflow-hidden me-3">
-													<a href="/Restaurant/Update/${row.id}">
+													<a href="/Category/Update/${row.id}">
 												<div class="symbol-label h-75">
-													<img src="${(row.logoPath === null ? '/assets/images/blank-image.svg' : row.logoPath)}" alt="${row.name}" class="w-100">
+													<img src="${(row.imagePath === null ? '/assets/images/blank-image.svg' : row.imagePath)}" alt="${row.name}" class="w-100">
 												</div>
 											</a>
 										</div>
 
 										<div class="d-flex flex-column">
-											<a href="/Restaurant/Details/${row.id}" class="text-primary mb-1">${row.name}</a>
+											<a href="/Category/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
 										</div>
 										`;
 					},
 					"max-width": "200px"
 				},
-				{ "data": "description", "name": "Description" },
-				{ "data": "address", "name": "Address" },
 				{
 					"name": "CreatedOn",
 					"render": function (data, type, row) {
@@ -172,7 +48,7 @@ var KTDatatablesServerSide = function () {
 					"render": function (data, type, row) {
 						return `<span class=" badge badge-${row.isActive ? "success" : "danger"}">
 																${row.isActive ? "Available" : "Not Available"}
-															</span>`;
+								</span>`;
 					}
 				},
 				{
@@ -194,7 +70,7 @@ var KTDatatablesServerSide = function () {
 									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
 										<div class="menu-item px-3">
-											<a href="/Restaurant/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
+											<a href="/Category/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
 												Edit
 											</a>
 										</div>
