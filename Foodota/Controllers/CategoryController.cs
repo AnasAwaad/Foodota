@@ -18,6 +18,47 @@ public class CategoryController : Controller
 		return View();
 	}
 
+	[HttpGet]
+	public IActionResult Create()
+	{
+		return PartialView("_Form");
+	}
+
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+	public IActionResult Create(CategoryFormViewModel viewModel)
+	{
+		if (!ModelState.IsValid) return NotFound();
+
+		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";
+
+		var result = _imageService.UploadImage(viewModel.Image, imageName, "images/category", false);
+
+		if (!result.isUploaded)
+		{
+			ModelState.AddModelError("Image", result.errorMessage!);
+			return View("Form", viewModel);
+		}
+		var model = _mapper.Map<Category>(viewModel);
+		model.ImagePath = "/images/category/" + imageName;
+		_context.Categories.Add(model);
+		_context.SaveChanges();
+
+		return Ok();
+	}
+
+	[HttpGet]
+	public IActionResult Update(int id)
+	{
+		var category = _context.Categories.Find(id);
+		if (category == null)
+			return NotFound();
+
+		var viewModel = _mapper.Map<CategoryFormViewModel>(category);
+
+		return PartialView("_Form", viewModel);
+	}
+
 
 	[HttpPost]
 	public IActionResult GetCategories()

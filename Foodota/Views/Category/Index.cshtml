@@ -51,7 +51,7 @@
 					<div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
 
 						<!--begin::Add Restaurant-->
-						<a asp-action="Create" class="btn btn-primary" data-bs-toggle="tooltip">
+						<a class="btn btn-primary js-render-modal" data-title="Create Category" data-url="/Category/Create" data-bs-toggle="tooltip">
 							<i class="ki-duotone ki-plus fs-2"></i>
 							Add Category
 						</a>
@@ -92,6 +92,7 @@
 }
 
 @section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 	<script src="~/assets/plugins/datatables/datatables.bundle.js"></script>
 	<script src="~/js/category.js"></script>
 }

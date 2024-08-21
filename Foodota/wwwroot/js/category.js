@@ -1,4 +1,23 @@
 ﻿
+$(function () {
+	$('body').on('change','#Image', function (e) {
+		var imageURL = URL.createObjectURL(e.target.files[0]);
+		$('.image-input-wrapper').css('background-image', 'url(' + imageURL + ')');
+		$('.image-input.image-input-empty [data-kt-image-input-action=cancel]').css("display","flex")
+	})
+
+	$('body').on('click', '#remove-image', function (e) {
+		$('.image-input.image-input-empty [data-kt-image-input-action=cancel]').css("display", "none");
+		$('.image-input-wrapper').css('background-image', '');
+
+	})
+
+})
+
+function ShowSuccessMessage() {
+	
+}
+
 // Handle Datatable
 var KTDatatablesServerSide = function () {
 	// Shared variables
@@ -18,11 +37,11 @@ var KTDatatablesServerSide = function () {
 			columns: [
 				{
 					"name": "Name",
-					"className": "d-flex align-items-center ",
+					"className": "d-flex align-items-center text-center ",
 					"render": function (data, type, row) {
 						return `
-										<div class="symbol symbol-50px overflow-hidden me-3">
-													<a href="/Category/Update/${row.id}">
+										<div class="symbol symbol-50px overflow-hidden me-3 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">
+													<a href="#">
 												<div class="symbol-label h-75">
 													<img src="${(row.imagePath === null ? '/assets/images/blank-image.svg' : row.imagePath)}" alt="${row.name}" class="w-100">
 												</div>
@@ -30,13 +49,14 @@ var KTDatatablesServerSide = function () {
 										</div>
 
 										<div class="d-flex flex-column">
-											<a href="/Category/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
+											<a href="#" class="text-primary mb-1 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">${row.name}</a>
 										</div>
 										`;
 					},
 					"max-width": "200px"
 				},
 				{
+					"className": "text-center",
 					"name": "CreatedOn",
 					"render": function (data, type, row) {
 						return moment(row.createdOn).format("ll");
@@ -45,6 +65,8 @@ var KTDatatablesServerSide = function () {
 				{
 					"data": "isActive",
 					"name": "IsActive",
+					"className": "text-center",
+
 					"render": function (data, type, row) {
 						return `<span class=" badge badge-${row.isActive ? "success" : "danger"}">
 																${row.isActive ? "Available" : "Not Available"}
@@ -53,6 +75,7 @@ var KTDatatablesServerSide = function () {
 				},
 				{
 					"orderable": false,
+					"className": "text-center",
 					"render": function (data, type, row) {
 						return `
 									<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
@@ -67,10 +90,10 @@ var KTDatatablesServerSide = function () {
 										</span>
 									</a>
 									<!--begin::Menu-->
-									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+									<div href="#" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
 										<div class="menu-item px-3">
-											<a href="/Category/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
+											<a class="menu-link px-3" data-kt-docs-table-filter="edit_row">
 												Edit
 											</a>
 										</div>
