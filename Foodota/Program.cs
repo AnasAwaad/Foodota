@@ -3,6 +3,7 @@ using Foodota.Mapping;
 using Foodota.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
 namespace Foodota;
 public class Program
@@ -25,6 +26,7 @@ public class Program
 
 		builder.Services.AddAutoMapper(typeof(DomainProfile));
         builder.Services.AddTransient<IImageService, ImageService>();
+		builder.Services.AddExpressiveAnnotations();
 
 		var app = builder.Build();
 

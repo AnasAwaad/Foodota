@@ -4,6 +4,8 @@ using Foodota.Core.ViewModels;
 using Foodota.Data;
 using Foodota.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Foodota.Controllers;
 public class RestaurantController : Controller
@@ -27,7 +29,11 @@ public class RestaurantController : Controller
 	[HttpGet]
 	public IActionResult Create()
 	{
-		return View("Form");
+		var viewModel = new RestaurantFormViewModel()
+		{
+			weekDays = _context.WeekDays.ToList()
+		};
+		return View("Form",viewModel);
 	}
 
 	[HttpPost]
@@ -36,8 +42,8 @@ public class RestaurantController : Controller
 	{
 		if (!ModelState.IsValid) return View("Form",viewModel);
 
-		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.ImageUrl.FileName)}";
-		var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo.FileName)}";
+		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";
+		var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo!.FileName)}";
 
 		var logoRes = _imageService.UploadImage(viewModel.Logo, logoName, "images/restaurant/logo", false);
 
@@ -47,7 +53,7 @@ public class RestaurantController : Controller
 			return View("Form", viewModel);
 		}
 
-		var result=_imageService.UploadImage(viewModel.ImageUrl, imageName, "images/restaurant/banner", false);
+		var result=_imageService.UploadImage(viewModel.Image, imageName, "images/restaurant/banner", false);
 
 		if(!result.isUploaded)
 		{
@@ -55,12 +61,136 @@ public class RestaurantController : Controller
 			return View("Form", viewModel) ;
 		}
 		var model = _mapper.Map<Restaurant>(viewModel);
-		model.ImageUrl = imageName;
-		model.Logo = logoName;
-
+		model.ImagePath = "/images/restaurant/banner/"+imageName;
+		model.LogoPath = "/images/restaurant/logo/" + logoName;
+		model.IsActive = true;
+		model.CreatedOn = DateTime.Now;
 		_context.Restaurants.Add(model);
 		_context.SaveChanges();
 
-		return RedirectToAction(nameof(Index));
+		return Ok(model.Id);
+	}
+
+	[HttpPost]
+	public IActionResult AddOpeningHours([FromBody]OpeningHoursRequest request)
+	{
+		if(request.OpeningHours is null){
+			return BadRequest();
+		}
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
+
+	public IActionResult UpdateOpeningHours([FromBody]OpeningHoursRequest request)
+	{
+		if(request.OpeningHours is null){
+			return BadRequest();
+		}
+		var openingHours=_context.OpeningHours.Where(o=>o.RestaurantId==request.OpeningHours.First().RestaurantId).ToList();
+
+		_context.OpeningHours.RemoveRange(openingHours);
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
+
+	public IActionResult GetOpeningHours(int id)
+	{
+		var openingHours = _context.OpeningHours.Include(o=>o.WeekDay).Where(o => o.RestaurantId == id).Select(o=>new 
+		{
+			From=o.From,
+			To=o.To,
+			Day=o.WeekDay.Name
+		}).ToList();
+		return Json(new {OpeningHours= openingHours});
+	}
+
+	[HttpGet]
+	public IActionResult Update(int id)
+	{
+		var restaurant = _context.Restaurants.Include(r => r.OpeningHours).SingleOrDefault(r => r.Id == id);
+		if(restaurant == null)
+			return NotFound();
+
+		var viewModel = _mapper.Map<RestaurantFormViewModel>(restaurant);
+		viewModel.weekDays = _context.WeekDays.ToList();
+
+		return View("Update",viewModel);
+	}
+
+
+	
+	public IActionResult Update(RestaurantFormViewModel viewModel)
+	{
+		var restaurant = _context.Restaurants.Find(viewModel.Id);	
+		if(restaurant is null)
+			return NotFound();
+
+		if(viewModel.Image is not null)
+		{
+			var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image.FileName)}";
+
+
+			_imageService.DeleteImage(restaurant.ImagePath!);
+			var res=_imageService.UploadImage(viewModel.Image, imageName, "images/restaurant/banner", false);
+			if (!res.isUploaded)
+			{
+				ModelState.AddModelError("Image", res.errorMessage!);
+				return View("Update", viewModel);
+			}
+			viewModel.ImagePath = "/images/restaurant/banner/" + imageName;
+		}
+		else
+			viewModel.ImagePath = restaurant.ImagePath;
+
+		if (viewModel.Logo is not null)
+		{
+			var logoName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Logo.FileName)}";
+
+			_imageService.DeleteImage(restaurant.LogoPath!);
+			var res = _imageService.UploadImage(viewModel.Logo, logoName, "images/restaurant/logo", false);
+			if (!res.isUploaded)
+			{
+				ModelState.AddModelError("Logo", res.errorMessage!);
+				return View("Update", viewModel);
+			}
+			viewModel.LogoPath = "/images/restaurant/logo/" + logoName;
+		}else
+			viewModel.LogoPath = restaurant.LogoPath;
+
+
+		restaurant= _mapper.Map(viewModel, restaurant);
+
+		_context.Restaurants.Update(restaurant);
+		_context.SaveChanges();
+		return Ok();
+
+	}
+
+
+	[HttpPost]
+	public IActionResult GetRestaurants()
+	{
+		var skip = Convert.ToInt32(Request.Form["start"]);
+		var pageSize = Convert.ToInt32(Request.Form["length"]);
+		var orderColumnIndex = Convert.ToInt32(Request.Form["order[0][column]"]);
+		var orderColumnName = Request.Form[$"columns[{orderColumnIndex}][name]"];
+		var orderColumnDirection = Request.Form["order[0][dir]"];
+		var searchValue = Request.Form["search[value]"];
+
+
+		IQueryable<Restaurant> restaurants = _context.Restaurants;
+
+		if (!string.IsNullOrEmpty(searchValue))
+			restaurants = restaurants.Where(b => b.Name.Contains(searchValue!) || b.Description.Contains(searchValue!));
+
+		restaurants = restaurants.OrderBy($"{orderColumnName} {orderColumnDirection}");  //orderBy from system.Linq.Dynamic lib
+
+		var data = restaurants.Skip(skip).Take(pageSize).ToList();
+		var restaurantVM = _mapper.Map<IEnumerable<RestaurantViewModel>>(data);
+		var recordsTotal = restaurants.Count();
+
+		return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = restaurantVM });
 	}
 }

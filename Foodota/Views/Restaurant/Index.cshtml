@@ -1,1 +1,99 @@
-﻿<a asp-action="Create" class="btn btn-primary">Create Restaurant</a>
+﻿<div class="d-flex flex-column flex-column-fluid  container-fluid ">
+
+	<!--begin::Toolbar-->
+	<div class="toolbar mb-5 mb-lg-7" id="kt_toolbar">
+
+
+		<!--begin::Page title-->
+		<div class="page-title d-flex flex-column me-3">
+			<!--begin::Title-->
+			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">
+				Restaurants
+			</h1>
+			<!--end::Title-->
+			<!--begin::Breadcrumb-->
+			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-gray-600">
+					<a asp-action="index" asp-controller="Home" class="text-gray-600 text-hover-primary">
+						Home
+					</a>
+				</li>
+				<!--end::Item-->
+				<!--begin::Item-->
+				<li class="breadcrumb-item text-gray-600">
+					Restaurants
+				</li>
+				<!--end::Item-->
+
+			</ul>
+			<!--end::Breadcrumb-->
+		</div>
+		<!--end::Page title-->
+	</div>
+	<!--end::Toolbar-->
+
+	<div class="content flex-column-fluid" id="kt_content">
+		<!--begin::Category-->
+		<div class="card card-flush">
+			<!--begin::Card header-->
+			<div class="card-header align-items-center py-5 gap-2 gap-md-5">
+
+				<!--begin::Wrapper-->
+				<div class="d-flex flex-stack mb-5 w-100 justify-content-between">
+					<!--begin::Search-->
+					<div class="d-flex align-items-center position-relative my-1">
+						<i class="ki-duotone ki-magnifier fs-1 position-absolute ms-6"><span class="path1"></span><span class="path2"></span></i>
+						<input type="text" id="dataTableSearch" data-kt-docs-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search Restaurants" />
+					</div>
+					<!--end::Search-->
+					<!--begin::Toolbar-->
+					<div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
+
+						<!--begin::Add Restaurant-->
+						<a asp-action="Create" class="btn btn-primary" data-bs-toggle="tooltip">
+							<i class="ki-duotone ki-plus fs-2"></i>
+							Add Restaurant
+						</a>
+						<!--end::Add Restaurant-->
+					</div>
+					<!--end::Toolbar-->
+				</div>
+				<!--end::Wrapper-->
+			</div>
+			<!--end::Card header-->
+			<!--begin::Card body-->
+			<div class="card-body pt-0">
+				<!--begin::Datatable-->
+				
+					<table id="datatable" class="table align-middle table-row-dashed fs-6 gy-5">
+						<thead>
+							<tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+
+								<th>Restaurant</th>
+								<th>Description</th>
+								<th>Address</th>
+								<th>CreatedOn</th>
+								<th>IsActive</th>
+								<th class="min-w-100px">Actions</th>
+							</tr>
+						</thead>
+						<tbody class="text-gray-600 fw-semibold">
+						</tbody>
+					</table>
+					<!--end::Datatable-->
+			</div>
+		</div>
+	</div>
+	
+
+</div>
+
+@section Styles {
+	<link href="~/assets/plugins/datatables/datatables.bundle.css" rel="stylesheet" />
+}
+
+@section Scripts {
+	<script src="~/assets/plugins/datatables/datatables.bundle.js"></script>
+	<script src="~/js/restaurant.js"></script>
+}

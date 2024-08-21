@@ -30,14 +30,16 @@ namespace Foodota.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("From")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("To")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WeekDayId")
                         .HasColumnType("int");
@@ -72,7 +74,7 @@ namespace Foodota.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -83,7 +85,7 @@ namespace Foodota.Data.Migrations
                     b.Property<DateTime?>("LastUpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Logo")
+                    b.Property<string>("LogoPath")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -106,9 +108,10 @@ namespace Foodota.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
