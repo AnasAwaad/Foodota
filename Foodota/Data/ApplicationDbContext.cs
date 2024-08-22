@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext
 			.HasKey(e => new { e.RestaurantId, e.CategoryId });
 	}
 	public DbSet<Category> Categories { get; set; }
+	public DbSet<MenuItem> MenuItems { get; set; }
 	public DbSet<OpeningHour> OpeningHours { get; set; }
 	public DbSet<Restaurant> Restaurants { get; set; }
 	public DbSet<RestaurantCategory> RestaurantCategories { get; set; }

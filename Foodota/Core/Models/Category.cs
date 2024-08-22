@@ -12,4 +12,6 @@ public class Category : BaseModel
 	[StringLength(500)]
 	public string ImagePath { get; set; } = null!;
     public ICollection<RestaurantCategory> RestaurantCategories { get; set; } = new List<RestaurantCategory>();
+	public ICollection<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
+
 }
