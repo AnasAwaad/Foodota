@@ -1,4 +1,6 @@
-﻿namespace Foodota.Controllers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace Foodota.Controllers;
 public class RestaurantController : Controller
 {
 	private readonly IImageService _imageService;
@@ -22,7 +24,12 @@ public class RestaurantController : Controller
 	{
 		var viewModel = new RestaurantFormViewModel()
 		{
-			weekDays = _context.WeekDays.ToList()
+			weekDays = _context.WeekDays.ToList(),
+			Categories = _context.Categories.Select(c => new SelectListItem()
+			{
+				Text = c.Name,
+				Value = Convert.ToString(c.Id)
+			}).ToList()
 		};
 		return View("Form",viewModel);
 	}
@@ -56,56 +63,34 @@ public class RestaurantController : Controller
 		model.LogoPath = "/images/restaurant/logo/" + logoName;
 		model.IsActive = true;
 		model.CreatedOn = DateTime.Now;
+
+		foreach (var item in viewModel.SelectedCategories)
+			model.RestaurantCategories.Add(new RestaurantCategory { CategoryId = item, });
+
 		_context.Restaurants.Add(model);
 		_context.SaveChanges();
 
 		return Ok(model.Id);
 	}
 
-	[HttpPost]
-	public IActionResult AddOpeningHours([FromBody]OpeningHoursRequest request)
-	{
-		if(request.OpeningHours is null){
-			return BadRequest();
-		}
-		_context.OpeningHours.AddRange(request.OpeningHours);
-		_context.SaveChanges();
-		return Ok(Json("added successfully"));
-	}
-
-	public IActionResult UpdateOpeningHours([FromBody]OpeningHoursRequest request)
-	{
-		if(request.OpeningHours is null){
-			return BadRequest();
-		}
-		var openingHours=_context.OpeningHours.Where(o=>o.RestaurantId==request.OpeningHours.First().RestaurantId).ToList();
-
-		_context.OpeningHours.RemoveRange(openingHours);
-		_context.OpeningHours.AddRange(request.OpeningHours);
-		_context.SaveChanges();
-		return Ok(Json("added successfully"));
-	}
-
-	public IActionResult GetOpeningHours(int id)
-	{
-		var openingHours = _context.OpeningHours.Include(o=>o.WeekDay).Where(o => o.RestaurantId == id).Select(o=>new 
-		{
-			From=o.From,
-			To=o.To,
-			Day=o.WeekDay.Name
-		}).ToList();
-		return Json(new {OpeningHours= openingHours});
-	}
+	
 
 	[HttpGet]
 	public IActionResult Update(int id)
 	{
-		var restaurant = _context.Restaurants.Include(r => r.OpeningHours).SingleOrDefault(r => r.Id == id);
+		var restaurant = _context.Restaurants.Include(r => r.OpeningHours).Include(r=>r.RestaurantCategories).SingleOrDefault(r => r.Id == id);
 		if(restaurant == null)
 			return NotFound();
 
 		var viewModel = _mapper.Map<RestaurantFormViewModel>(restaurant);
 		viewModel.weekDays = _context.WeekDays.ToList();
+		viewModel.SelectedCategories=restaurant.RestaurantCategories.Select(r=>r.CategoryId).ToList();
+		viewModel.Categories = _context.Categories.Select(c=>new SelectListItem
+		{
+			Text = c.Name,
+			Value = Convert.ToString(c.Id)
+		}).ToList();
+
 
 		return View("Form",viewModel);
 	}
@@ -155,12 +140,21 @@ public class RestaurantController : Controller
 
 		restaurant= _mapper.Map(viewModel, restaurant);
 
+
+		// update categories for restaurant
+		var categories=_context.RestaurantCategories.Where(r=>r.RestaurantId==viewModel.Id).ToList();
+		_context.RestaurantCategories.RemoveRange(categories);
+		foreach (var item in viewModel.SelectedCategories)
+			restaurant.RestaurantCategories.Add(new RestaurantCategory { CategoryId = item });
+
+
 		_context.Restaurants.Update(restaurant);
 		_context.SaveChanges();
 		return Ok();
 
 	}
 
+	#region Ajax Requests
 
 	[HttpPost]
 	public IActionResult GetRestaurants()
@@ -186,4 +180,43 @@ public class RestaurantController : Controller
 
 		return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = restaurantVM });
 	}
+
+	[HttpPost]
+	public IActionResult AddOpeningHours([FromBody] OpeningHoursRequest request)
+	{
+		if (request.OpeningHours is null)
+		{
+			return BadRequest();
+		}
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
+
+	public IActionResult UpdateOpeningHours([FromBody] OpeningHoursRequest request)
+	{
+		if (request.OpeningHours is null)
+		{
+			return BadRequest();
+		}
+		var openingHours = _context.OpeningHours.Where(o => o.RestaurantId == request.OpeningHours.First().RestaurantId).ToList();
+
+		_context.OpeningHours.RemoveRange(openingHours);
+		_context.OpeningHours.AddRange(request.OpeningHours);
+		_context.SaveChanges();
+		return Ok(Json("added successfully"));
+	}
+
+	public IActionResult GetOpeningHours(int id)
+	{
+		var openingHours = _context.OpeningHours.Include(o => o.WeekDay).Where(o => o.RestaurantId == id).Select(o => new
+		{
+			From = o.From,
+			To = o.To,
+			Day = o.WeekDay.Name
+		}).ToList();
+		return Json(new { OpeningHours = openingHours });
+	}
+	#endregion
+
 }

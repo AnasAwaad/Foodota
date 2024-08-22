@@ -15,5 +15,10 @@ public class DomainProfile : Profile
 		// Category
 		CreateMap<CategoryFormViewModel, Category>().ReverseMap();
 		CreateMap<Category, CategoryViewModel>().ReverseMap();
+
+		// MenuItem
+		CreateMap<MenuItemFormViewModel, MenuItem>().ReverseMap();
+		CreateMap<MenuItem, MenuItemViewModel>().ReverseMap();
+
 	}
 }

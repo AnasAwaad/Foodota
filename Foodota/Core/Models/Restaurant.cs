@@ -17,4 +17,5 @@ public class Restaurant : BaseModel
 	public string Address { get; set; }=null!;
     public ICollection<OpeningHour> OpeningHours { get; set; } = new List<OpeningHour>();
     public ICollection<RestaurantCategory> RestaurantCategories { get; set; } = new List<RestaurantCategory>();
+    public ICollection<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
 }
