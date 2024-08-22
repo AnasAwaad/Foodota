@@ -63,7 +63,33 @@ public class MenuItemController : Controller
 		_context.MenuItems.Add(model);
 		_context.SaveChanges();
 
-		return Ok(model.Id);
+		return RedirectToAction(nameof(Index));
 	}
 
+
+	[HttpPost]
+	public IActionResult GetItems()
+	{
+		var skip = Convert.ToInt32(Request.Form["start"]);
+		var pageSize = Convert.ToInt32(Request.Form["length"]);
+		var orderColumnIndex = Convert.ToInt32(Request.Form["order[0][column]"]);
+		var orderColumnName = Request.Form[$"columns[{orderColumnIndex}][name]"];
+		var orderColumnDirection = Request.Form["order[0][dir]"];
+		var searchValue = Request.Form["search[value]"];
+
+
+		IQueryable<MenuItem> menuItems = _context.MenuItems;
+
+		if (!string.IsNullOrEmpty(searchValue))
+			menuItems = menuItems.Where(b => b.Name.Contains(searchValue!) || b.Description.Contains(searchValue!));
+
+		menuItems = menuItems.OrderBy($"{orderColumnName} {orderColumnDirection}");  //orderBy from system.Linq.Dynamic lib
+
+		var data = menuItems.Skip(skip).Take(pageSize).ToList();
+
+		var menuItemVM = _mapper.Map<IEnumerable<MenuItemViewModel>>(data);
+		var recordsTotal = menuItems.Count();
+
+		return Json(new { recordsFiltered = recordsTotal, recordsTotal, data = menuItemVM });
+	}
 }
