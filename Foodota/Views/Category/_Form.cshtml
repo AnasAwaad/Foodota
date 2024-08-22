@@ -20,14 +20,14 @@
 			<!--begin::Image input placeholder-->
 			<style>
 				.image-input-placeholder {
-					background-image: url("@(Model.Id > 0 ? Model.ImagePath : "/assets/images/blank-image.svg")");
+					background-image: url("@(Model?.Id > 0 ? Model?.ImagePath : "/assets/images/blank-image.svg")");
 					background-position: center;
 					background-size: contain;
 				}
 
 
 				[data-bs-theme="dark"] .image-input-placeholder {
-					background-image: url("@(Model.Id > 0 ? Model.ImagePath : "/assets/images/blank-image-dark.svg")");
+					background-image: url("@(Model?.Id > 0 ? Model?.ImagePath : "/assets/images/blank-image-dark.svg")");
 				}
 			</style>
 			<!--end::Image input placeholder-->

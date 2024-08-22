@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\category\" />
+    <Folder Include="wwwroot\images\menuItem\" />
     <Folder Include="wwwroot\images\restaurant\logo\" />
     <Folder Include="wwwroot\images\restaurant\banner\" />
   </ItemGroup>
