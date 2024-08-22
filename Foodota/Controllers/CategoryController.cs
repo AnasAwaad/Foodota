@@ -28,7 +28,7 @@ public class CategoryController : Controller
 	[ValidateAntiForgeryToken]
 	public IActionResult Create(CategoryFormViewModel viewModel)
 	{
-		if (!ModelState.IsValid) return NotFound();
+		if (!ModelState.IsValid) return BadRequest();
 
 		var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";
 
@@ -58,6 +58,43 @@ public class CategoryController : Controller
 
 		return PartialView("_Form", viewModel);
 	}
+
+
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+	public IActionResult Update(CategoryFormViewModel viewModel)
+	{
+		if (!ModelState.IsValid) return BadRequest();
+
+		var category = _context.Categories.Find(viewModel.Id);
+		if (category is null)
+			return NotFound();
+
+		if (viewModel.Image is not null)
+		{
+			var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image.FileName)}";
+
+
+			_imageService.DeleteImage(category.ImagePath!);
+			var res = _imageService.UploadImage(viewModel.Image, imageName, "images/category", false);
+			if (!res.isUploaded)
+			{
+				ModelState.AddModelError("Image", res.errorMessage!);
+				return View("Update", viewModel);
+			}
+			viewModel.ImagePath = "/images/category/" + imageName;
+		}
+		else
+			viewModel.ImagePath = category.ImagePath;
+
+		category = _mapper.Map(viewModel, category);
+
+		_context.Categories.Update(category);
+		_context.SaveChanges();
+		return Ok();
+
+	}
+
 
 
 	[HttpPost]

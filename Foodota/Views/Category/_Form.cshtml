@@ -3,7 +3,7 @@
 
 <form method="post"
 	  enctype="multipart/form-data"
-	  asp-action="Create"
+	  asp-action="@(Model?.Id > 0 ? "Update":"Create")"
 	  data-ajax="true"
 	  data-ajax-method="post"
 	  data-ajax-success="ShowSuccessMessage"
@@ -20,14 +20,14 @@
 			<!--begin::Image input placeholder-->
 			<style>
 				.image-input-placeholder {
-					background-image: url("/assets/images/blank-image.svg");
+					background-image: url("@(Model.Id > 0 ? Model.ImagePath : "/assets/images/blank-image.svg")");
 					background-position: center;
 					background-size: contain;
 				}
 
 
 				[data-bs-theme="dark"] .image-input-placeholder {
-					background-image: url("/assets/images/blank-image-dark.svg");
+					background-image: url("@(Model.Id > 0 ? Model.ImagePath : "/assets/images/blank-image-dark.svg")");
 				}
 			</style>
 			<!--end::Image input placeholder-->
@@ -37,10 +37,10 @@
 			}
 			<div class="text-center">
 				<!--begin::Image input-->
-				<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
+				<div class="image-input image-input-empty image-input-outline mb-3" data-kt-image-input="true">
 					
 					<!--begin::Preview existing avatar-->
-					<div class="image-input-wrapper w-250px h-150px" ></div>
+					<div class="image-input-wrapper w-250px h-150px image-input-placeholder "></div>
 					<!--end::Preview existing avatar-->
 					<!--begin::Label-->
 					<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">

@@ -27,9 +27,9 @@ var KTDatatablesServerSide = function () {
 	// Private functions
 	var initDatatable = function () {
 		dt = $("#datatable").DataTable({
-			searchDelay: 500,
 			processing: true,
 			serverSide: true,
+			
 			ajax: {
 				url: "/Category/GetCategories",
 				type: "POST"
@@ -37,36 +37,36 @@ var KTDatatablesServerSide = function () {
 			columns: [
 				{
 					"name": "Name",
-					"className": "d-flex align-items-center text-center ",
 					"render": function (data, type, row) {
 						return `
-										<div class="symbol symbol-50px overflow-hidden me-3 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">
-													<a href="#">
-												<div class="symbol-label h-75">
-													<img src="${(row.imagePath === null ? '/assets/images/blank-image.svg' : row.imagePath)}" alt="${row.name}" class="w-100">
-												</div>
-											</a>
+							<div class="d-flex align-items-center text-center">
+								<div class="symbol symbol-50px overflow-hidden me-3 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">
+											<a href="#">
+										<div class="symbol-label h-75">
+											<img src="${(row.imagePath === null ? '/assets/images/blank-image.svg' : row.imagePath)}" alt="${row.name}" class="w-100">
 										</div>
+									</a>
+								</div>
 
-										<div class="d-flex flex-column">
-											<a href="#" class="text-primary mb-1 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">${row.name}</a>
-										</div>
+								<div class="d-flex flex-column">
+									<a href="#" class="text-primary mb-1 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}">${row.name}</a>
+								</div>
+							</div>
 										`;
 					},
-					"max-width": "200px"
 				},
 				{
 					"className": "text-center",
 					"name": "CreatedOn",
 					"render": function (data, type, row) {
 						return moment(row.createdOn).format("ll");
-					}
+					},
+
 				},
 				{
 					"data": "isActive",
 					"name": "IsActive",
 					"className": "text-center",
-
 					"render": function (data, type, row) {
 						return `<span class=" badge badge-${row.isActive ? "success" : "danger"}">
 																${row.isActive ? "Available" : "Not Available"}
@@ -90,10 +90,10 @@ var KTDatatablesServerSide = function () {
 										</span>
 									</a>
 									<!--begin::Menu-->
-									<div href="#" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+									<div href="#" class=" menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"  data-kt-menu="true">
 										<!--begin::Menu item-->
 										<div class="menu-item px-3">
-											<a class="menu-link px-3" data-kt-docs-table-filter="edit_row">
+											<a class="menu-link px-3 js-render-modal" data-title="Update Category" data-url="Category/Update/${row.id}" data-kt-docs-table-filter="edit_row">
 												Edit
 											</a>
 										</div>
@@ -108,7 +108,7 @@ var KTDatatablesServerSide = function () {
 										<!--end::Menu item-->
 									</div>
 									<!--end::Menu-->
-									`;
+						`;
 					}
 
 				}

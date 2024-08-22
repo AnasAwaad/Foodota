@@ -114,6 +114,8 @@ public class RestaurantController : Controller
 	
 	public IActionResult Update(RestaurantFormViewModel viewModel)
 	{
+		if (!ModelState.IsValid) return BadRequest();
+
 		var restaurant = _context.Restaurants.Find(viewModel.Id);	
 		if(restaurant is null)
 			return NotFound();

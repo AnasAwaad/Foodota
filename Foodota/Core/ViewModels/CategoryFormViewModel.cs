@@ -11,6 +11,6 @@ public class CategoryFormViewModel
 	public string Name { get; set; } = null!;
 
 	[Display(Name = "Image")]
-	public IFormFile Image { get; set; } = null!;
+	public IFormFile? Image { get; set; } = null!;
 	public string? ImagePath { get; set; }
 }
