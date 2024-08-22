@@ -1,6 +1,7 @@
 ﻿using Foodota.Core.Models;
 using Foodota.Web.Core.Consts;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
@@ -25,4 +26,8 @@ public class RestaurantFormViewModel
 	[ValidateNever]
 	public IList<WeekDay> weekDays { get; set; }=new List<WeekDay>();
 	public IList<OpeningHour>? OpeningHours { get; set; }=new List<OpeningHour>();
+	public IList<SelectListItem>? Categories { get; set; }=new List<SelectListItem>();
+
+	[Display(Name ="Categories")]
+	public IList<int> SelectedCategories { get; set; }=new List<int>();
 }

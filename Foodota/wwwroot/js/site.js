@@ -39,6 +39,15 @@ function OnCompleteModal() {
 	$('#Modal').modal('hide');
 	$('#datatable').DataTable().draw();
 }
+
+function ApplySelect2() {
+	$('.js-select2').select2();
+	$('.js-select2').on('select2:select', function (e) {
+		var selectItem = $(this);
+		$('form').not('#signOutForm').validate().element("#" + selectItem.attr('id'));// ex: #AuthorId
+	});
+}
+
 $(function () {
 	// Attach event handler to checkboxes
 
@@ -89,7 +98,7 @@ $(function () {
 
 	});
 
-
+	ApplySelect2();
 });
 
 

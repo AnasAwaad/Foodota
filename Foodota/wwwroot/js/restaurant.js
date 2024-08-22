@@ -152,7 +152,7 @@ var KTDatatablesServerSide = function () {
 										</div>
 
 										<div class="d-flex flex-column">
-											<a href="/Restaurant/Details/${row.id}" class="text-primary mb-1">${row.name}</a>
+											<a href="/Restaurant/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
 										</div>
 										`;
 					},

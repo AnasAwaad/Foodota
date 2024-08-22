@@ -161,7 +161,7 @@
 
 						</div>
 						<!--end::Image input-->
-
+						<!--begin::Input group-->
 						<div class="mb-5 fv-row fv-plugins-icon-container">
 							<!--begin::Label-->
 							<label class="required form-label" asp-for="Name"></label>
@@ -170,6 +170,19 @@
 							<input type="text" asp-for="Name" class="form-control mb-2" placeholder="Restaurant name" />
 							<!--end::Input-->
 							<span asp-validation-for="Name" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+						</div>
+						<!--end::Input group-->
+						<!--begin::Input group-->
+						<div class="mb-5 fv-row fv-plugins-icon-container">
+							<!--begin::Label-->
+							<label class="required form-label" asp-for="SelectedCategories"></label>
+							<!--end::Label-->
+							<!--begin::Input-->
+							<select class="form-select form-select-solid js-select2" asp-for="SelectedCategories" asp-items="Model.Categories" data-control="select2" data-placeholder="Select categories">
+							</select>
+							
+							<!--end::Input-->
+							<span asp-validation-for="SelectedCategories" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
 						</div>
 						<!--end::Input group-->
 						<!--begin::Input group-->
