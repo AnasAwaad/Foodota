@@ -10,7 +10,7 @@
         <div class="page-title d-flex flex-column me-3">
             <!--begin::Title-->
             <h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">
-                Add Item
+                @(Model.Id > 0 ? "Update" : "Add") Item
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
@@ -24,7 +24,7 @@
                 <!--end::Item-->
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-gray-600">
-                    Add Item
+                    @(Model.Id > 0 ? "Update" : "Add") Item
                 </li>
                 <!--end::Item-->
             </ul>
@@ -47,7 +47,7 @@
                     <div class="card-header pt-7" id="kt_chat_contacts_header">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            <i class="ki-duotone ki-badge fs-1 me-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>            <h2>Add New Item</h2>
+                            <i class="ki-duotone ki-badge fs-1 me-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>            <h2>@(Model.Id > 0 ? "Update" : "Add New") Item</h2>
                         </div>
                         <!--end::Card title-->
                     </div>
@@ -55,7 +55,7 @@
                     <!--begin::Card body-->
                     <div class="card-body pt-5">
                         <!--begin::Form-->
-                        <form asp-action="Create" class="form" method="post" enctype="multipart/form-data">
+                        <form asp-controller="MenuItem" asp-action="@(Model.Id > 0 ? "Update" : "Create")" class="form" method="post" enctype="multipart/form-data">
                             <!--begin::Input group-->
                             <div class="mb-7">
                                 <!--begin::Label-->
@@ -78,7 +78,7 @@
                                     <!--begin::Image input-->
                                     <div class="image-input image-input-outline image-input-placeholder image-input-empty image-input-empty " data-kt-image-input="true">
                                         <!--begin::Preview existing avatar-->
-                                        <div class="image-input-wrapper w-200px h-200px" style="background-image: url('')"></div>
+                                        <div class="image-input-wrapper w-200px h-200px" style="background-image: url('@(Model.Id > 0 ? Model.ImagePath : "")')"></div>
                                         <!--end::Preview existing avatar-->
                                         <!--begin::Edit-->
                                         <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change avatar" data-bs-original-title="Change avatar" data-kt-initialized="1">
@@ -129,7 +129,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" asp-for="SellingPrice" value="" placeholder="Selling price">
+                                        <input type="text" class="form-control form-control-solid" asp-for="SellingPrice" value="@(Model.Id > 0 ? Model.SellingPrice : "")" placeholder="Selling price">
                                         <!--end::Input-->
                                         <span asp-validation-for="SellingPrice" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
                                     </div>
@@ -147,7 +147,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" asp-for="MainPrice" value="" placeholder="Main price">
+                                        <input type="text" class="form-control form-control-solid" asp-for="MainPrice" value="@(Model.Id > 0 ? Model.MainPrice : "")" placeholder="Main price">
                                         <!--end::Input-->
                                         <span asp-validation-for="MainPrice" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
                                     </div>
@@ -219,9 +219,9 @@
                             <!--begin::Action buttons-->
                             <div class="d-flex justify-content-end">
                                 <!--begin::Button-->
-                                <button type="reset" data-kt-contacts-type="cancel" class="btn btn-light me-3">
+                                <a asp-action="Index" asp-controller="MenuItem" class="btn btn-light me-3">
                                     Cancel
-                                </button>
+                                </a>
                                 <!--end::Button-->
                                 <!--begin::Button-->
                                 <button type="submit" data-kt-contacts-type="submit" class="btn btn-primary">
@@ -250,3 +250,7 @@
     <!--end::Post-->
     
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}

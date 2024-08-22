@@ -20,9 +20,8 @@ var KTDatatablesServerSide = function () {
 			columns: [
 				{
 					"name": "Name",
-					"className": "d-flex align-items-center ",
 					"render": function (data, type, row) {
-						return `
+						return `<div class="d-flex align-items-center ">
 										<div class="symbol symbol-50px overflow-hidden me-3">
 													<a href="/MenuItem/Update/${row.id}">
 												<div class="symbol-label h-75">
@@ -34,6 +33,7 @@ var KTDatatablesServerSide = function () {
 										<div class="d-flex flex-column">
 											<a href="/MenuItem/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
 										</div>
+								</div>
 										`;
 					},
 					"max-width": "200px"

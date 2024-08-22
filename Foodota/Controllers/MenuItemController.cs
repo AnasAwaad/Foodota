@@ -36,7 +36,7 @@ public class MenuItemController : Controller
 			}).ToList()
 		};
 
-		return View(viewModel);
+		return View("Form",viewModel);
 	}
 
 	[HttpPost]
@@ -66,8 +66,67 @@ public class MenuItemController : Controller
 		return RedirectToAction(nameof(Index));
 	}
 
+	[HttpGet]
+	public IActionResult Update(int id)
+	{
+		var menuItem = _context.MenuItems.Find(id);
+		if (menuItem == null)
+			return NotFound();
 
-	[HttpPost]
+		var viewModel = _mapper.Map<MenuItemFormViewModel>(menuItem);
+
+		viewModel.Categories = _context.Categories.Select(c => new SelectListItem
+		{
+			Text = c.Name,
+			Value = Convert.ToString(c.Id)
+		}).ToList();
+
+		viewModel.Restaurants = _context.Restaurants.Select(c => new SelectListItem
+		{
+			Text = c.Name,
+			Value = Convert.ToString(c.Id)
+		}).ToList();
+
+		return View("Form", viewModel);
+	}
+
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Update(MenuItemFormViewModel viewModel)
+    {
+        if (!ModelState.IsValid) return BadRequest();
+
+        var menuItem = _context.MenuItems.Find(viewModel.Id);
+        if (menuItem is null)
+            return NotFound();
+
+        if (viewModel.Image is not null)
+        {
+            var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image.FileName)}";
+
+            _imageService.DeleteImage(menuItem.ImagePath!);
+            var res = _imageService.UploadImage(viewModel.Image, imageName, "images/menuItem", false);
+            if (!res.isUploaded)
+            {
+                ModelState.AddModelError("Image", res.errorMessage!);
+                return View("Update", viewModel);
+            }
+            viewModel.ImagePath = "/images/menuItem/" + imageName;
+        }
+        else
+            viewModel.ImagePath = menuItem.ImagePath;
+
+        menuItem = _mapper.Map(viewModel, menuItem);
+
+        _context.MenuItems.Update(menuItem);
+        _context.SaveChanges();
+		return RedirectToAction(nameof(Index));
+
+    }
+
+
+    [HttpPost]
 	public IActionResult GetItems()
 	{
 		var skip = Convert.ToInt32(Request.Form["start"]);

@@ -14,7 +14,7 @@ public class MenuItemFormViewModel
 	[Display(Name = "Main Price")]
 	public int MainPrice { get; set; }
 	public string Description { get; set; } = null!;
-	public IFormFile Image { get; set; } = null!;
+	public IFormFile? Image { get; set; } = null!;
 	public string? ImagePath { get; set; } = null!;
 	public int RestaurantId { get; set; }
 	public int CategoryId { get; set; }
