@@ -1,13 +1,4 @@
-﻿using AutoMapper;
-using Foodota.Core.Models;
-using Foodota.Core.ViewModels;
-using Foodota.Data;
-using Foodota.Web.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
-
-namespace Foodota.Controllers;
+﻿namespace Foodota.Controllers;
 public class RestaurantController : Controller
 {
 	private readonly IImageService _imageService;
@@ -116,13 +107,15 @@ public class RestaurantController : Controller
 		var viewModel = _mapper.Map<RestaurantFormViewModel>(restaurant);
 		viewModel.weekDays = _context.WeekDays.ToList();
 
-		return View("Update",viewModel);
+		return View("Form",viewModel);
 	}
 
 
 	
 	public IActionResult Update(RestaurantFormViewModel viewModel)
 	{
+		if (!ModelState.IsValid) return BadRequest();
+
 		var restaurant = _context.Restaurants.Find(viewModel.Id);	
 		if(restaurant is null)
 			return NotFound();

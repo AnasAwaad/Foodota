@@ -6,7 +6,7 @@
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column me-3">
 			<!--begin::Title-->
-			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">Add Restaurant</h1>
+			<h1 class="d-flex text-gray-900 fw-bold my-1 fs-3">@(Model.Id > 0?"Update":"Create") Restaurant</h1>
 			<!--end::Title-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-semibold text-gray-600 fs-7 my-1">
@@ -19,7 +19,7 @@
 				<li class="breadcrumb-item text-gray-600">Restaurant</li>
 				<!--end::Item-->
 				<!--begin::Item-->
-				<li class="breadcrumb-item text-gray-600">Create</li>
+				<li class="breadcrumb-item text-gray-600">@(Model.Id > 0 ? "Update" : "Create")</li>
 				<!--end::Item-->
 			</ul>
 			<!--end::Breadcrumb-->
@@ -34,7 +34,7 @@
 			  class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
 			  data-ajax="true"
 			  data-ajax-method="post"
-			  data-ajax-success="OnSuccessSubmitCreate"
+			  data-ajax-success="@(Model.Id > 0?"OnSuccessSubmitUpdate":"OnSuccessSubmitCreate")"
 			  data-ajax-failure="ShowErrorMessage">
 			<!--begin::Aside column-->
 			<div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
@@ -67,11 +67,15 @@
 							}
 						</style>
 						<!--end::Image input placeholder-->
+						@if (Model.Id > 0)
+						{
+							<input type="hidden" asp-for="Id" />
+						}
 						<!--begin::Image input-->
 						<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true">
 
 							<!--begin::Preview existing avatar-->
-							<div class="image-input-wrapper w-150px h-150px" ></div>
+							<div class="image-input-wrapper w-150px h-150px" style="background-image:@(Model.Id > 0 ?$"url({Model.LogoPath})":string.Empty)"></div>
 							<!--end::Preview existing avatar-->
 							<!--begin::Label-->
 							<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
@@ -127,7 +131,7 @@
 							<!--begin::Image input-->
 							<div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3 w-100" data-kt-image-input="true">
 								<!--begin::Preview existing avatar-->
-								<div class="image-input-wrapper w-100 h-300px" style="background-size:cover;background-position:center;"></div>
+								<div class="image-input-wrapper w-100 h-300px" style="background-image:@(Model.Id > 0 ?$"url({Model.ImagePath})":string.Empty);background-size:cover;background-position:center;"></div>
 								<!--end::Preview existing avatar-->
 								<!--begin::Label-->
 								<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
@@ -239,7 +243,7 @@
 					<!--end::Button-->
 					<!--begin::Button-->
 					<button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
-						<span class="indicator-label"> Create </span>
+						<span class="indicator-label"> @(Model.Id > 0 ? "Update" : "Create") </span>
 						<span class="indicator-progress">
 							Please wait...
 							<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
