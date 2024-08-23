@@ -5,78 +5,125 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
+<div class="d-flex flex-column flex-root">
+
+    <!--begin::Authentication - Sign-in -->
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+		<!--begin::Logo-->
+        <a href="/metronic8/demo14/index.html" class="d-block d-lg-none mx-auto py-20">
+            <img alt="Logo" src="~/assets/images/logo.png" class="theme-light-show h-25px">
+            <img alt="Logo" src="~/assets/images/logo.png" class="theme-dark-show h-25px">
+        </a>
+        <!--end::Logo-->
+        <!--begin::Aside-->
+        <div class="d-flex flex-column flex-column-fluid flex-center w-lg-50 p-10">
+            <!--begin::Wrapper-->
+            <div class="d-flex justify-content-between flex-column-fluid flex-column w-100 mw-450px">
+                <!--begin::Header-->
+                <div class="d-flex flex-stack py-2">
+                    <!--begin::Back link-->
+                    <div class="me-2">
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+                    <!--end::Back link-->
+                    <!--begin::Sign Up link-->
+                    <div class="m-0">
+                        <span class="text-gray-500 fw-bold fs-5 me-2" data-kt-translate="sign-in-head-desc">
+                            Not a Member yet?
+                        </span>
+
+                        <a asp-page="./Register" class="link-primary fw-bold fs-5" data-kt-translate="sign-in-head-link">
+                            Sign Up
+                        </a>
+                    </div>
+                    <!--end::Sign Up link--->
+
+                </div>
+                <!--end::Header-->
+                <!--begin::Body-->
+                <div class="py-20">
+
+                    <!--begin::Form-->
+                    <form id="account" method="post" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework">
+                        <!--begin::Body-->
+                        <div class="card-body">
+                            <!--begin::Heading-->
+                            <div class="text-start mb-10">
+                                <!--begin::Title-->
+                                <h1 class="text-gray-900 mb-3 fs-3x" data-kt-translate="sign-in-title">
+                                    Sign In
+                                </h1>
+                                <!--end::Title-->
+                            </div>
+                            <div asp-validation-summary="All" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                            <!--begin::Heading-->
+                            <!--begin::Input group--->
+                            <div class="fv-row mb-8 fv-plugins-icon-container">
+                                <!--begin::Email-->
+                                <input type="text" placeholder="Username/Email" asp-for="Input.UsernameOrEmail" autocomplete="off" data-kt-translate="sign-in-input-email" class="form-control ">
+                                <!--end::Email-->
+                                <span asp-validation-for="Input.UsernameOrEmail" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+                            </div>
+
+                            <!--end::Input group--->
+                            <div class="fv-row mb-7 fv-plugins-icon-container">
+                                <!--begin::Password-->
+                                <input type="password" placeholder="Password" asp-for="Input.Password" autocomplete="off" data-kt-translate="sign-in-input-password" class="form-control ">
+                                <!--end::Password-->
+                                <span asp-validation-for="Input.Password" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+                            </div>
+                            <!--end::Input group--->
+                            <!--begin::Wrapper-->
+                            <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10">
+                                <div></div>
+
+                                <!--begin::Link-->
+                                <a href="/metronic8/demo14/authentication/layouts/fancy/reset-password.html" class="link-primary" data-kt-translate="sign-in-forgot-password">
+                                    Forgot Password ?
+                                </a>
+                                <!--end::Link-->
+                            </div>
+                            <!--end::Wrapper-->
+                            <!--begin::Actions-->
+                            <div class="d-flex flex-stack">
+                                <!--begin::Submit-->
+                                <button id="kt_sign_in_submit" class="btn btn-primary me-2 flex-shrink-0">
+                                    <!--begin::Indicator label-->
+                                    <span class="indicator-label" data-kt-translate="sign-in-submit">
+                                        Sign In
+                                    </span>
+                                    <!--end::Indicator label-->
+                                    <!--begin::Indicator progress-->
+                                    <span class="indicator-progress">
+                                        <span data-kt-translate="general-progress">Please wait...</span>
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                    <!--end::Indicator progress-->
+                                </button>
+                                <!--end::Submit-->
+                            </div>
+                            <!--end::Actions-->
                         </div>
+                        <!--begin::Body-->
                     </form>
-                }
-            }
-        </section>
+                    <!--end::Form-->
+
+
+                </div>
+                <!--end::Body-->
+               <div></div>
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Aside-->
+        <!--begin::Body-->
+        <div class="d-none d-lg-flex flex-lg-row-fluid w-50 bgi-size-cover bgi-position-y-center bgi-position-x-start bgi-no-repeat" style="background-image: url(/assets/images/login.png)">
+        </div>
+        <!--begin::Body-->
     </div>
+    <!--end::Authentication - Sign-in-->
 </div>
+
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
