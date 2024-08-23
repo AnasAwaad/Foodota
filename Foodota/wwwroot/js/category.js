@@ -31,7 +31,7 @@ var KTDatatablesServerSide = function () {
 			serverSide: true,
 			
 			ajax: {
-				url: "/Category/GetCategories",
+				url: "/admin/Category/GetCategories",
 				type: "POST"
 			},
 			columns: [

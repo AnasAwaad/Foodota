@@ -1,0 +1,103 @@
+﻿@model CategoryFormViewModel
+
+
+
+<form method="post"
+	  enctype="multipart/form-data"
+	  asp-action="@(Model?.Id > 0 ? "Update":"Create")"
+	  data-ajax="true"
+	  data-ajax-method="post"
+	  data-ajax-success="ShowSuccessMessage"
+	  data-ajax-failure="ShowErrorMessage"
+	  data-ajax-begin="OnBeginModal"
+	  data-ajax-complete="OnCompleteModal">
+	<!--begin::Thumbnail settings-->
+	<div class="card card-flush py-4">
+
+		<!--begin::Card body-->
+		<div class="card-body py-0 px-2">
+
+			<!--begin::Image input-->
+			<!--begin::Image input placeholder-->
+			<style>
+				.image-input-placeholder {
+					background-image: url("@(Model?.Id > 0 ? Model?.ImagePath : "/assets/images/blank-image.svg")");
+					background-position: center;
+					background-size: contain;
+				}
+
+
+				[data-bs-theme="dark"] .image-input-placeholder {
+					background-image: url("@(Model?.Id > 0 ? Model?.ImagePath : "/assets/images/blank-image-dark.svg")");
+				}
+			</style>
+			<!--end::Image input placeholder-->
+			@if (Model?.Id > 0)
+			{
+				<input type="hidden" asp-for="Id" />
+			}
+			<div class="text-center">
+				<!--begin::Image input-->
+				<div class="image-input image-input-empty image-input-outline mb-3" data-kt-image-input="true">
+					
+					<!--begin::Preview existing avatar-->
+					<div class="image-input-wrapper w-250px h-150px image-input-placeholder "></div>
+					<!--end::Preview existing avatar-->
+					<!--begin::Label-->
+					<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" aria-label="Change logo" data-bs-original-title="Change logo" data-kt-initialized="1">
+						<i class="fa-solid fa-pen"></i>
+
+						<!--begin::Inputs-->
+						<input type="file" asp-for="Image" accept=".png, .jpg, .jpeg" />
+						<input type="hidden" name="avatar_remove" />
+						<!--end::Inputs-->
+					</label>
+					<!--end::Label-->
+					<!--begin::Cancel-->
+					<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" id="remove-image" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" aria-label="Cancel avatar" data-bs-original-title="Cancel avatar" data-kt-initialized="1">
+						<i class="bi bi-x-lg"></i>
+					</span>
+					<!--end::Cancel-->
+					<!--begin::Remove-->
+					<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" aria-label="Remove avatar" data-bs-original-title="Remove avatar" data-kt-initialized="1">
+						<i class="bi bi-x-lg"></i>
+					</span>
+					<!--end::Remove-->
+				</div>
+				<!--end::Image input-->
+				<!--begin::Description-->
+				<div class="text-muted fs-7">Set the category logo. Only *.png, *.jpg and *.jpeg image files are accepted</div>
+				<!--end::Description-->
+				<span asp-validation-for="Image" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+
+			</div>
+			<div class="mb-5 fv-row fv-plugins-icon-container">
+				<!--begin::Label-->
+				<label class="form-label" asp-for="Name"></label>
+				<!--end::Label-->
+				<!--begin::Input-->
+				<input type="text" asp-for="Name" class="form-control mb-2" placeholder="Category name" />
+				<!--end::Input-->
+				<span asp-validation-for="Name" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+			</div>
+		</div>
+		<!--end::Card body--> 
+		
+	</div>
+	
+	<!--end::Thumbnail settings-->
+	<div class="d-flex justify-content-end my-5">
+		<!--begin::Button-->
+		<a class="btn btn-light me-5 js-close-model"> Cancel </a>
+		<!--end::Button-->
+		<!--begin::Button-->
+		<button type="submit" class="btn btn-primary">
+			<span class="indicator-label"> @(Model?.Id > 0 ? "Update" : "Create") </span>
+			<span class="indicator-progress">
+				Please wait...
+				<span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+			</span>
+		</button>
+		<!--end::Button-->
+	</div>
+</form>

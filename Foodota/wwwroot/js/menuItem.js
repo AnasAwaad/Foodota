@@ -14,7 +14,7 @@ var KTDatatablesServerSide = function () {
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "/MenuItem/GetItems",
+				url: "/admin/MenuItem/GetItems",
 				type: "POST"
 			},
 			columns: [

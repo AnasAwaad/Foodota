@@ -1,4 +1,4 @@
-﻿using Foodota.Core.Models;
+﻿using Foodota.Areas.Admin.Models;
 using Foodota.Web.Core.Consts;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;

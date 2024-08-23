@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Foodota.Core.Models;
+using Foodota.Areas.Admin.Models;
 using Foodota.Core.ViewModels;
 
 namespace Foodota.Mapping;
