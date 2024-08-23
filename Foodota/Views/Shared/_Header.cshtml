@@ -22,9 +22,6 @@
 		<!--begin::Topbar-->
 		<div class="d-flex align-items-center flex-shrink-0">
 			
-			
-			
-			
 			<!--begin::Theme mode-->
 			<div class="d-flex align-items-center ms-1">
 				<!--begin::Menu toggle-->
@@ -177,7 +174,10 @@
 					<!--end::Menu item-->
 					<!--begin::Menu item-->
 					<div class="menu-item px-5">
-						<a href="../../demo14/dist/authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+						<form class="form-inline" method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+							@* <button class="nav-link btn btn-link text-dark">Logout</button> *@
+							<a class="menu-link px-5 js-submit-form">Logout</a>
+						</form>
 					</div>
 					<!--end::Menu item-->
 				</div>
@@ -190,25 +190,3 @@
 	<!--end::Container-->
 </div>
 <!--end::Header-->
-@* <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Foodota</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header> *@

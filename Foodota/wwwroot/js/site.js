@@ -57,6 +57,7 @@ $(function () {
 
 
 	// Initialize flatpickr for time inputs
+
 	$(".js-flatpickr-from").flatpickr({
 		enableTime: true,
 		noCalendar: true,
@@ -92,13 +93,17 @@ $(function () {
 			}
 		})
 	});
-
+	// Close Modal
 	$('body').on('click', '.js-close-model', function () {
 		$('#Modal').modal('hide');
 
 	});
-
+	// Handle Select2
 	ApplySelect2();
+
+	$('.js-submit-form').on('click', function () {
+		$(this).parents('form').submit();
+	});
 });
 
 

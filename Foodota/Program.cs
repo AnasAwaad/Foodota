@@ -1,7 +1,10 @@
-using Foodota.Data;
+using Foodota.Areas.Admin.Data;
 using Foodota.Mapping;
+using Foodota.Services;
+using Foodota.Settings;
 using Foodota.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
@@ -18,15 +21,22 @@ public class Program
             options.UseSqlServer(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultUI()
+            .AddDefaultTokenProviders();
+
+
         builder.Services.AddControllersWithViews();
 
 
 
 		builder.Services.AddAutoMapper(typeof(DomainProfile));
         builder.Services.AddTransient<IImageService, ImageService>();
+        builder.Services.AddTransient<IEmailSender, EmailSender>();
 		builder.Services.AddExpressiveAnnotations();
+
+		builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
 		var app = builder.Build();
 
@@ -50,9 +60,15 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllerRoute(
+         name: "areas",
+         pattern: "{area=exists}/{controller=Home}/{action=Index}/{id?}");
+
+        app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
         app.MapRazorPages();
+
 
         app.Run();
     }

@@ -16,7 +16,7 @@ function OnSuccessSubmitCreate(restaurantId) {
 
 	// Send opening hours to the server
 	$.ajax({
-		url: "/Restaurant/AddOpeningHours",
+		url: "/admin/Restaurant/AddOpeningHours",
 		contentType: "application/json;charset=utf-8",
 		type: "POST",
 		dataType: "json",
@@ -45,7 +45,7 @@ function OnSuccessSubmitUpdate() {
 
 	// Send opening hours to the server
 	$.ajax({
-		url: "/Restaurant/UpdateOpeningHours",
+		url: "/admin/Restaurant/UpdateOpeningHours",
 		contentType: "application/json;charset=utf-8",
 		type: "POST",
 		dataType: "json",
@@ -80,7 +80,7 @@ $(document).ready(function () {
 	if (restaurantId) {
 		// Fetch opening hours from the server
 		$.ajax({
-			url: "/Restaurant/GetOpeningHours/" + restaurantId,
+			url: "/admin/Restaurant/GetOpeningHours/" + restaurantId,
 			success: function (res) {
 				res.openingHours.forEach(function (item) {
 					// Set the checkbox and time inputs based on response
@@ -134,7 +134,7 @@ var KTDatatablesServerSide = function () {
 			processing: true,
 			serverSide: true,
 			ajax: {
-				url: "/Restaurant/GetRestaurants",
+				url: "/admin/Restaurant/GetRestaurants",
 				type: "POST"
 			},
 			columns: [
