@@ -1,11 +1,12 @@
 ﻿using Foodota.Areas.Admin.Data;
 using Foodota.Areas.Admin.Models;
+using Foodota.Core.Consts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Foodota.Areas.Admin.Controllers;
 
-[Authorize]
+[Authorize(Roles = AppRoles.Admin)]
 [Area("Admin")]
 
 public class MenuItemController : Controller

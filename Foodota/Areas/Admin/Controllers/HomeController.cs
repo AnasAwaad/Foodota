@@ -1,10 +1,11 @@
+using Foodota.Core.Consts;
 using Foodota.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Foodota.Areas.Admin.Controllers;
-[Authorize]
+[Authorize(Roles = AppRoles.Admin)]
 [Area("Admin")]
 public class HomeController : Controller
 {

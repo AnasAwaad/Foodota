@@ -1,5 +1,6 @@
 using Foodota.Areas.Admin.Data;
 using Foodota.Mapping;
+using Foodota.Seeds;
 using Foodota.Services;
 using Foodota.Settings;
 using Foodota.Web.Services;
@@ -11,7 +12,7 @@ using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 namespace Foodota;
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,16 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+
+        var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+        using var scope=scopeFactory.CreateScope();
+
+        var roleManager=scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager=scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        await DefaultRoles.SeedRolesAsync(roleManager);
+        await DefaultUsers.SeedAdminUsersAsync(userManager);
+
 
         app.MapControllerRoute(
          name: "areas",
