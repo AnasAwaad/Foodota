@@ -34,6 +34,8 @@ public class CategoryController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(CategoryFormViewModel viewModel)
     {
+        if(viewModel.Image is null)
+            ModelState.AddModelError("Image","Image field is required");
         if (!ModelState.IsValid) return BadRequest();
 
         var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";

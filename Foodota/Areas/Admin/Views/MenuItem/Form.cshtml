@@ -102,9 +102,13 @@
                                         <!--end::Remove-->
                                     </div>
                                     <!--end::Image input-->
+                                    <span asp-validation-for="Image" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
+
                                 </div>
+                                
                                 <!--end::Image input wrapper-->
                             </div>
+
                             <!--end::Input group-->
                             <!--begin::Input group-->
                             <div class="mb-5 fv-row fv-plugins-icon-container">
@@ -130,7 +134,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" asp-for="SellingPrice" value="@(Model.Id > 0 ? Model.SellingPrice : "")" placeholder="Selling price">
+                                        <input  class="form-control form-control-solid" asp-for="SellingPrice" placeholder="Selling price">
                                         <!--end::Input-->
                                         <span asp-validation-for="SellingPrice" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
                                     </div>
@@ -148,7 +152,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" asp-for="MainPrice" value="@(Model.Id > 0 ? Model.MainPrice : "")" placeholder="Main price">
+                                        <input class="form-control form-control-solid" asp-for="MainPrice" placeholder="Main price">
                                         <!--end::Input-->
                                         <span asp-validation-for="MainPrice" class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></span>
                                     </div>

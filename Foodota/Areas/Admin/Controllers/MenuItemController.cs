@@ -50,8 +50,29 @@ public class MenuItemController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(MenuItemFormViewModel viewModel)
     {
-        if (!ModelState.IsValid) return View(viewModel);
+        if (viewModel.Image is null)
+        {
+            ModelState.AddModelError("Image", "Image field is required!");
+        }
 
+        if (!ModelState.IsValid)
+        {
+            // If ModelState is invalid, repopulate the dropdowns and return the form
+            viewModel.Categories = _context.Categories.Select(c => new SelectListItem()
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            }).ToList();
+            viewModel.Restaurants = _context.Restaurants.Select(r => new SelectListItem()
+            {
+                Text = r.Name,
+                Value = r.Id.ToString()
+            }).ToList();
+
+            return View("Form", viewModel);
+        }
+
+        // Image is not null, proceed with image processing
         var imageName = $"{Guid.NewGuid()}{Path.GetExtension(viewModel.Image!.FileName)}";
 
         var result = _imageService.UploadImage(viewModel.Image, imageName, "images/menuItem", false);

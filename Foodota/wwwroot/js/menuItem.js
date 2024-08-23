@@ -23,7 +23,7 @@ var KTDatatablesServerSide = function () {
 					"render": function (data, type, row) {
 						return `<div class="d-flex align-items-center ">
 										<div class="symbol symbol-50px overflow-hidden me-3">
-													<a href="/MenuItem/Update/${row.id}">
+													<a href="/Admin/MenuItem/Update/${row.id}">
 												<div class="symbol-label h-75">
 													<img src="${(row.imagePath === null ? '/assets/images/blank-image.svg' : row.imagePath)}" alt="${row.name}" class="w-100">
 												</div>
@@ -31,7 +31,7 @@ var KTDatatablesServerSide = function () {
 										</div>
 
 										<div class="d-flex flex-column">
-											<a href="/MenuItem/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
+											<a href="/Admin/MenuItem/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
 										</div>
 								</div>
 										`;
