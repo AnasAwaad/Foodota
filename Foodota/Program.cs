@@ -1,7 +1,10 @@
 using Foodota.Data;
 using Foodota.Mapping;
+using Foodota.Services;
+using Foodota.Settings;
 using Foodota.Web.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
@@ -23,13 +26,17 @@ public class Program
             .AddDefaultUI()
             .AddDefaultTokenProviders();
 
+
         builder.Services.AddControllersWithViews();
 
 
 
 		builder.Services.AddAutoMapper(typeof(DomainProfile));
         builder.Services.AddTransient<IImageService, ImageService>();
+        builder.Services.AddTransient<IEmailSender, EmailSender>();
 		builder.Services.AddExpressiveAnnotations();
+
+		builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
 		var app = builder.Build();
 
