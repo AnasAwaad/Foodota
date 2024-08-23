@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Foodota.Core.Consts
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@
     @* <partial name="_Header"/> *@
 
     <!--begin::Root-->
-	@if (SignInManager.IsSignedIn(User))
+	@if (User.IsInRole(AppRoles.Admin))
 	{
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Page-->
