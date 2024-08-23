@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Foodota.Controllers;
+
+[Authorize]
 public class CategoryController : Controller
 {
 	private readonly IImageService _imageService;

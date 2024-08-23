@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Foodota.Controllers;
+
+[Authorize]
 public class RestaurantController : Controller
 {
 	private readonly IImageService _imageService;
