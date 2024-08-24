@@ -59,8 +59,8 @@ ul {
     bottom:92px;
     width:100%;
 }
-.my-120px{
-    margin:120px 0;
+.py-120px{
+    padding:120px 0;
 }
 
 .global-header{
@@ -112,6 +112,21 @@ ul {
     height:200px;
     width:100%;
 }
+
+.restaurant-section {
+    background-color: #f2f2f2;
+}
+
+.restaurant-section .card-categories a {
+    color: #071c1f;
+    text-decoration:none;
+}
+
+.restaurant-section .card > img{
+    max-height:278px;
+    min-height:278px;
+}
+
 
 @media (max-width:1000px) {
     .home-banner {

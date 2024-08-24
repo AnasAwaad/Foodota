@@ -20,10 +20,16 @@ public class HomeController : Controller
 	public IActionResult Index()
     {
         var categories=_context.Categories.Include(c=>c.RestaurantCategories).ToList();
-
+        var restaurants = _context.Restaurants
+            .Include(r=>r.OpeningHours)
+            .Include(r=>r.RestaurantCategories)
+            .ThenInclude(rc=>rc.Category)
+            .Take(9)
+            .ToList();
         HomeViewModel model = new HomeViewModel
         {
-            Categories = categories
+            Categories = categories,
+            Restaurants=restaurants
         };
         return View(model);
     }
