@@ -23,7 +23,7 @@ function OnSuccessSubmitCreate(restaurantId) {
 		data: JSON.stringify({ OpeningHours: OpeningHours }),
 		success: function (res) {
 			console.log('Success:', res);
-			window.location.href = "/Restaurant/Index";
+			window.location.href = "/Admin/Restaurant/Index";
 		},
 		error: function (xhr, status, error) {
 			console.error('Error submitting opening hours:', status, error);
@@ -45,14 +45,14 @@ function OnSuccessSubmitUpdate() {
 
 	// Send opening hours to the server
 	$.ajax({
-		url: "/admin/Restaurant/UpdateOpeningHours",
+		url: "/Admin/Restaurant/UpdateOpeningHours",
 		contentType: "application/json;charset=utf-8",
 		type: "POST",
 		dataType: "json",
 		data: JSON.stringify({ OpeningHours: OpeningHours }),
 		success: function (res) {
 			console.log('Success:', res);
-			window.location.href = "/Restaurant/Index";
+			window.location.href = "/Admin/Restaurant/Index";
 		},
 		error: function (xhr, status, error) {
 			console.error('Error submitting opening hours:', status, error);
@@ -63,6 +63,8 @@ function OnSuccessSubmitUpdate() {
 
 
 $(document).ready(function () {
+
+
 	// Initialize the weekDays object with correct days
 	var weekDays = {
 		"Saturday": 0,
@@ -80,7 +82,7 @@ $(document).ready(function () {
 	if (restaurantId) {
 		// Fetch opening hours from the server
 		$.ajax({
-			url: "/admin/Restaurant/GetOpeningHours/" + restaurantId,
+			url: "/Admin/Restaurant/GetOpeningHours/" + restaurantId,
 			success: function (res) {
 				res.openingHours.forEach(function (item) {
 					// Set the checkbox and time inputs based on response
@@ -144,7 +146,7 @@ var KTDatatablesServerSide = function () {
 					"render": function (data, type, row) {
 						return `
 										<div class="symbol symbol-50px overflow-hidden me-3">
-													<a href="/Restaurant/Update/${row.id}">
+													<a href="/Admin/Restaurant/Update/${row.id}">
 												<div class="symbol-label h-75">
 													<img src="${(row.logoPath === null ? '/assets/images/blank-image.svg' : row.logoPath)}" alt="${row.name}" class="w-100">
 												</div>
@@ -152,7 +154,7 @@ var KTDatatablesServerSide = function () {
 										</div>
 
 										<div class="d-flex flex-column">
-											<a href="/Restaurant/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
+											<a href="/Admin/Restaurant/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
 										</div>
 										`;
 					},
@@ -194,7 +196,7 @@ var KTDatatablesServerSide = function () {
 									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 										<!--begin::Menu item-->
 										<div class="menu-item px-3">
-											<a href="/Restaurant/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
+											<a href="/Admin/Restaurant/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
 												Edit
 											</a>
 										</div>

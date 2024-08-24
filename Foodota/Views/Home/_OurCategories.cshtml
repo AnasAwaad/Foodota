@@ -1,0 +1,37 @@
+﻿@using Foodota.Areas.Admin.Models
+@model IEnumerable<Category>
+
+<section class="category-section my-120px ">
+	<div class="container">
+		<div class="row">
+			<div class="global-header col-12 m-auto text-center mb-5">
+				<div class="header-title text-">Top Foods</div>
+				<h3 class="header-content">Our Categories</h3>
+				<div class="bottom-dots  clearfix">
+					<span class="dot line-dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+				</div>
+			</div>
+
+			@foreach (var category in Model)
+			{
+				<div class="col col-md-6 col-lg-6 col-xl-3">
+
+					<div class="category-card mb-5">
+						<a href="#" class="d-flex justify-content-center">
+							<img src="@category.ImagePath" class="category-image" />
+						</a>
+						<div class="category-content text-center">
+							<div class="category-title">@category.Name</div>
+							<div class="category-desc">@(category.RestaurantCategories.Count) Restaurants Products</div>
+						</div>
+					</div>
+				</div>
+
+			}
+		</div>
+
+	</div>
+</section>
