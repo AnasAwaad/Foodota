@@ -63,6 +63,8 @@ function OnSuccessSubmitUpdate() {
 
 
 $(document).ready(function () {
+
+
 	// Initialize the weekDays object with correct days
 	var weekDays = {
 		"Saturday": 0,
