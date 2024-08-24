@@ -1,8 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Foodota.Core.Consts
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="home-banner">
+	<header class="container ">
+		<div class="d-flex justify-content-between">
+			<div>
+				<a class="logo" asp-controller="Home" asp-action="Index">
+					<img src="~/assets/images/logo.png" style="height:60px;" />
+				</a>
+			</div>
+			<div class="toggleMenu" onclick="toggleMenu();"></div>
+
+			<div class="navigation ">
+				<ul class="primary-list d-flex ">
+					<li>
+						<a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+					</li>
+					@if (User.IsInRole(AppRoles.Admin))
+					{
+						<li>
+							<a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
+						</li>
+					}
+				</ul>
+				<ul class="d-flex ms-0">
+					<li>
+						<a asp-area="" asp-controller="Home" asp-action="Index">Login</a>
+					</li>
+					<li>
+						<a asp-area="" asp-controller="Home" asp-action="Index">Register</a>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+	</header>
+	<section class="container hero row">
+
+		<div class="d-flex justify-content-center align-items-center text-white">
+			<div class="col-xxl-6 col-xl-7 col-lg-8 col-md-12">
+				<h1>Order Healthy and Fresh Food Any Time</h1>
+				<p>Italian food makes people think of big family dinners. So you may want to position your restaurant as a place to bring the whole family.</p>
+			</div>
+		</div>
+	</section>
+	<img src="/assets/images/wave.svg" class="wave-image"/>
+</section>
