@@ -1,5 +1,4 @@
-﻿@using Foodota.Areas.Admin.Models
-@model IEnumerable<Category>
+﻿@model IEnumerable<Category>
 
 <section class="category-section py-120px ">
 	<div class="container">
@@ -20,7 +19,7 @@
 				<div class="col-12 col-md-6 col-lg-6 col-xl-3">
 
 					<div class="category-card mb-5">
-						<a href="#" class="d-flex justify-content-center">
+						<a href="/Restaurant/Index/@category.Id" class="d-flex justify-content-center">
 							<img src="@category.ImagePath" class="category-image" />
 						</a>
 						<div class="category-content text-center">

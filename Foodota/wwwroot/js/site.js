@@ -15,10 +15,6 @@ function updateVisibility() {
 	});
 }
 
-function toggleMenu() {
-	$('.navigation').toggleClass('active');
-}
-
 function showSuccessMessage() {
 
 }

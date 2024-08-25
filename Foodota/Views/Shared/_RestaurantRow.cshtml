@@ -1,0 +1,50 @@
+﻿@model Restaurant
+<div class="align-self-normal col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2 pe-2 pt-2">
+	<div class="card h-100">
+		<img src="@Model.ImagePath" class="card-img-top" alt="...">
+		<div class="card-body d-flex flex-column">
+			<h5 class="card-title mb-4 fs-4 ">@Model.Name</h5>
+			<div class="card-categories d-flex gap-2 flex-wrap mb-3">
+				@if (!Model.RestaurantCategories.Any())
+				{
+					<span class="text-danger">no categories available</span>
+				}
+				else
+				{
+					@foreach (var category in Model.RestaurantCategories)
+					{
+						<a href="#" class="px-3 py-2 bg-light text-black rounded-1">@category.Category?.Name</a>
+					}
+				}
+
+			</div>
+			<div class="card-footer bg-white p-0 pt-3 mt-auto">
+				<div class="d-flex gap-3">
+					<a href="#">
+						<img src="@Model.LogoPath" width="50" />
+					</a>
+					<div>
+						<div class="opening-hours">
+
+							@foreach (var openingHour in Model.OpeningHours)
+							{
+								@if (openingHour.WeekDay.Name == DateTime.Now.DayOfWeek.ToString())
+								{
+									<div>
+										<i class="bi bi-clock-fill" style="color:green;"></i>
+										<span class="text-danger">@openingHour.From - @openingHour.To</span>
+									</div>
+								}
+							}
+						</div>
+
+						<div>
+							<i class="bi bi-geo-alt-fill" style="color:red;"></i>
+							<span class="text-dark">@Model.Address</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

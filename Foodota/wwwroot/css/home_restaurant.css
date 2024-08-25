@@ -1,0 +1,54 @@
+﻿/*.checkbox {
+    
+    
+}*/
+*{
+    padding:0;
+    margin:0;
+    box-sizing:border-box;
+}
+
+.row {
+     --bs-gutter-x: 0;
+}
+main #main-content {
+    min-height: calc(100vh - 100px);
+}
+.category-checkbox {
+    position: relative;
+    font-size: 15px;
+    color: #757575;
+    padding-left: 23px;
+    cursor: pointer;
+}
+
+.category-checkbox input {
+    position: absolute;
+    height: 0;
+    width: 0;
+}
+
+.category-checkbox .check{
+    position:absolute;
+    height:18px;
+    width:18px;
+    border:2px solid #e7e7e7;
+    border-radius:50%;
+    top:2px;
+    left:0;
+}
+
+.category-checkbox input:checked ~ .check::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 10px;
+    border-radius: 50%;
+    height: 10px;
+    background-color: #ffcc00;
+}
+.category-restaurants{
+    font-size:13px;
+}

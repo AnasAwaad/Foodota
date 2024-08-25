@@ -20,5 +20,7 @@ public class DomainProfile : Profile
 		CreateMap<MenuItemFormViewModel, MenuItem>().ReverseMap();
 		CreateMap<MenuItem, MenuItemViewModel>().ReverseMap();
 
+		CreateMap<Restaurant, RestaurantOpeningHourViewModel>();
+			//.ForMember(dest => dest.From, opt => opt.MapFrom(src => src.OpeningHours.Select(o=>o.From));
 	}
 }

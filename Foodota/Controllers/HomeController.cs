@@ -10,38 +10,39 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-	public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+	public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IMapper mapper)
 	{
 		_logger = logger;
 		_context = context;
+		_mapper = mapper;
 	}
 
 	public IActionResult Index()
     {
-        var categories=_context.Categories.Include(c=>c.RestaurantCategories).ToList();
-        var restaurants = _context.Restaurants
+        var categories=_context.Categories
+            .Include(c => c.RestaurantCategories)
+			.Where(c => c.RestaurantCategories.Any())
+            .Take(6)
+			.ToList();
+		
+		var restaurants = _context.Restaurants
             .Include(r=>r.OpeningHours)
+                .ThenInclude(o=>o.WeekDay)
             .Include(r=>r.RestaurantCategories)
-            .ThenInclude(rc=>rc.Category)
+                .ThenInclude(rc=>rc.Category)
             .Take(9)
             .ToList();
+
+        //var viewModel = _mapper.Map<IEnumerable<RestaurantOpeningHourViewModel>>(restaurants);
+
         HomeViewModel model = new HomeViewModel
         {
             Categories = categories,
-            Restaurants=restaurants
+            Restaurants = restaurants
         };
         return View(model);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //return Ok();
     }
 }

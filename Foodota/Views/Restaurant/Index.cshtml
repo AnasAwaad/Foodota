@@ -1,0 +1,101 @@
+﻿@model CategoryRestaurantsViewModel
+<header class="">
+	<div class="d-flex justify-content-between ">
+		<div>
+			<a class="logo" asp-controller="Home" asp-action="Index">
+				<img src="~/assets/images/logo.png" style="height:60px;" />
+			</a>
+		</div>
+		<div class="toggleMenu" onclick="toggleMenu();"></div>
+
+		<div class="navigation ">
+			<ul class="primary-list d-flex ">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+				</li>
+				@if (User.IsInRole(AppRoles.Admin))
+				{
+					<li>
+						<a class="text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
+					</li>
+				}
+			</ul>
+			<ul class="d-flex ms-0">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
+				</li>
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Register</a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+</header>
+
+<main class="row">
+	<aside class="col-sm-4 col-md-3 col-xl-2 ps-4 pt-4">
+		<div class="food-category-widget">
+			<h5 class="fw-800">Food Categories</h5>
+			<div class="bottom-dots  clearfix">
+				<span class="dot line-dot"></span>
+				<span class="dot"></span>
+				<span class="dot"></span>
+				<span class="dot"></span>
+			</div>
+		</div>
+		<div class="food-category-items pt-3 pe-3">
+			@foreach (var category in Model.AllCategories)
+			{
+				<div class="d-flex justify-content-between">
+					<label class="category-checkbox">
+						<input type="checkbox" name="categories" value="@category.Id" id="category-@category.Id">
+						<span class="check"></span>
+						@category.Name
+					</label>
+					<div class="category-restaurants">
+						<p>@category.RestaurantCategories.Count</p>
+					</div>
+				</div>
+			}
+
+
+		</div>
+	</aside>
+	<div class="col-sm-8 col-md-9 col-xl-10 bg-light " id="main-content">
+		<partial name="_Restaurants" model="@Model.CategoryRestaurants"/>
+	</div>
+</main>
+@section Styles {
+	<link href="~/css/home_restaurant.css" rel="stylesheet" />
+}
+@section Scripts{
+	<script>
+		$(function () {
+			$('input[type="checkbox"][name="categories"]').on('click', function () {
+				var selectedCategories = $('input[type="checkbox"][name="categories"]:checked').map(function () {
+					return $(this).val()
+				}).get();
+				
+				// send ajax request to retrieve restaurants data
+				$.ajax({
+					url:"/Restaurant/GetFilteredData",
+					method:"post",
+					data: {
+						CategoryIds: selectedCategories
+					},
+					success: function (res) {
+						if (res.trim() === '') {
+							$('#main-content').html(`
+								<div class="alert alert-primary py-3" role="alert">
+									No restaurants available
+								</div>`);
+						}else{
+							$('#main-content').html(res);
+						}
+					}
+				})
+			})
+		});
+	</script>
+}
