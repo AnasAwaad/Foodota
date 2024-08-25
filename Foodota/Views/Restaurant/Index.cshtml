@@ -33,7 +33,7 @@
 	</div>
 </header>
 
-<main class="row">
+<main class="row " id="restaurant-content">
 	<aside class="col-sm-4 col-md-3 col-xl-2 ps-4 pt-4">
 		<div class="food-category-widget">
 			<h5 class="fw-800">Food Categories</h5>
@@ -62,8 +62,25 @@
 
 		</div>
 	</aside>
-	<div class="col-sm-8 col-md-9 col-xl-10 bg-light " id="main-content">
-		<partial name="_Restaurants" model="@Model.CategoryRestaurants"/>
+	<div class="col-sm-8 col-md-9 col-xl-10 bg-light" >
+		<div class="row px-2 py-4">
+			<img src="~/assets/images/top-banner_.png" />
+		</div>
+		<div class="row px-2">
+			<div class="food-category-widget">
+				<h5 class="fw-800">@Model.CategoryRestaurants.Count() Restaurants</h5>
+				<div class="bottom-dots  clearfix">
+					<span class="dot line-dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row p-2" id="main-content">
+			<partial name="_Restaurants" model="@Model.CategoryRestaurants"/>
+		</div>
+
 	</div>
 </main>
 @section Styles {
@@ -85,17 +102,18 @@
 						CategoryIds: selectedCategories
 					},
 					success: function (res) {
-						if (res.trim() === '') {
-							$('#main-content').html(`
-								<div class="alert alert-primary py-3" role="alert">
-									No restaurants available
-								</div>`);
-						}else{
-							$('#main-content').html(res);
+						$('#main-content').html(res);
+						if ($('#main-content').text().trim()==''){
+							$('#main-content').html(`<div class="alert alert-primary" role="alert">
+								No restaurants available!
+							</div>`);
 						}
 					}
 				})
 			})
+			
 		});
+
+		
 	</script>
 }

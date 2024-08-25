@@ -11,7 +11,7 @@
 .row {
      --bs-gutter-x: 0;
 }
-main #main-content {
+#restaurant-content {
     min-height: calc(100vh - 100px);
 }
 .category-checkbox {
