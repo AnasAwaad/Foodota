@@ -140,7 +140,7 @@ ul {
         text-decoration: none;
     }
 
-    .restaurant-section .card > img {
+    .restaurant-section .card  .card-img-top {
         max-height: 278px;
         min-height: 278px;
     }

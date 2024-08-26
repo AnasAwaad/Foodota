@@ -38,39 +38,88 @@
 		<img src="@Model.ImagePath" alt="@Model.Name" />
 	</div>
 </section>
-<div class="restaurant-main">
+<div class="restaurant-main bg-light">
 	<div class="d-none" id="restaurant-id">@Model.Id</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-xxl-9 col-xl-9 col-sm-12 col-md-12 col-lg-8">
-				<div class="restaurant-info d-flex ">
-					<div class="restaurant-logo">
-						<img src="@Model.LogoPath" alt="" >
+	<div>
+		<div class="container ">
+			<div class="row">
+				<div class="col-xxl-9 col-xl-9 col-sm-12 col-md-12 col-lg-8">
+					<div class="restaurant-info d-flex ">
+						<div class="restaurant-logo">
+							<img src="@Model.LogoPath" alt="">
+						</div>
+						<div class=" pt-3">
+							<h2>@Model.Name</h2>
+							<p>
+								<i class="bi bi-geo-alt-fill" style="color:red;"></i>
+								@Model.Address
+							</p>
+						</div>
 					</div>
-					<div class=" pt-3">
-						<h2>@Model.Name</h2>
-						<p>
-							<i class="bi bi-geo-alt-fill" style="color:red;"></i>
-							@Model.Address
-						</p>
+				</div>
+
+				<div class="dropdown  col-3 d-flex align-items-end">
+					<button onclick="toggleDropDown()" class="dropbtn w-100">Working hours</button>
+					<div id="myDropdown" class="dropdown-content js-working-hours-content">
+
+						@for (int i = 0; i < Model.WeekDays.Count(); i++)
+						{
+							<div class="d-flex justify-content-between">
+								<div class="@(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"js-restaurant-Today":Model.WeekDays[i])"> @(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString() ? "Today" : Model.WeekDays[i])</div>
+								<div class="js-opening-hours-time">@(string.IsNullOrEmpty(Model.OpeningHours[i].From) ? "Closed" : $"{Model.OpeningHours[i].From} - {Model.OpeningHours[i].To}")</div>
+							</div>
+						}
+
 					</div>
 				</div>
 			</div>
 
-			<div class="dropdown  col-3 d-flex align-items-end">
-				<button onclick="toggleDropDown()" class="dropbtn w-100">Working hours</button>
-				<div id="myDropdown" class="dropdown-content js-working-hours-content">
-					
-					@for (int i = 0; i < Model.WeekDays.Count(); i++)
-					{
-						<div class="d-flex justify-content-between">
-							<div class="@(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"js-restaurant-Today":Model.WeekDays[i])"> @(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"Today":Model.WeekDays[i])</div>
-							<div class="js-opening-hours-time">@(string.IsNullOrEmpty(Model.OpeningHours[i].From)?"Closed": $"{Model.OpeningHours[i].From} - {Model.OpeningHours[i].To}")</div>
+		</div>
+		
+	</div>
+	<div class="my-5">
+		<div class="container ">
+			<div class="row ">
+
+				<div class="col-xxl-8 col-xl-8 col-lg-8 col-12 bg-white">
+					<div>
+						<h4>Categories</h4>
+						<div class="bottom-dots ">
+							<span class="dot line-dot"></span>
+							<span class="dot"></span>
+							<span class="dot"></span>
+							<span class="dot"></span>
 						</div>
-					}
-					
+					</div>
+					<div class="mt-4">
+						<div class="scrollable-tabs-container">
+							<div class="left-arrow ">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+								</svg>
+							</div>
+							<ul>
+								
+								@foreach (var item in Model.Categories)
+								{
+									<li>
+										<a href="#tab1">@item.Name</a>
+									</li>
+								}
+								
+							</ul>
+							<div class="right-arrow active">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+								</svg>
+							</div>
+						</div>
+					</div>
 				</div>
+				<div class="col-xxl-4 col-xl-4 col-lg-4 col-12"></div>
+
 			</div>
+
 		</div>
 	</div>
 

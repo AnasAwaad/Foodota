@@ -153,3 +153,93 @@
 .js-restaurant-Today {
     color: #FFCC00;
 }
+
+/* category scroll in restaurant details */
+
+.scrollable-tabs-container {
+    font-family: sans-serif;
+    background: #ffcc00;
+    width: 100%;
+    margin: 10px auto;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.scrollable-tabs-container svg {
+    width: 29px;
+    height: 29px;
+    cursor: pointer;
+    color: #fff;
+    padding: 8px;
+    border-radius: 50%;
+    pointer-events: auto;
+    background:#000;
+}
+
+.scrollable-tabs-container svg:hover {
+    background: #333;
+}
+
+.scrollable-tabs-container .left-arrow,
+.scrollable-tabs-container .right-arrow {
+    position: absolute;
+    height: 100%;
+    width: 100px;
+    top: 0;
+    display: none;
+    align-items: center;
+    pointer-events: none;
+}
+
+.scrollable-tabs-container .left-arrow.active,
+.scrollable-tabs-container .right-arrow.active {
+    display: flex;
+}
+
+.scrollable-tabs-container .left-arrow {
+    left: 0;
+}
+
+.scrollable-tabs-container .right-arrow {
+    right: 0;
+    justify-content: flex-end;
+}
+
+.scrollable-tabs-container ul {
+    display: flex;
+    list-style-type: none;
+    gap: 16px;
+    padding: 10px 20px;
+    margin: 0;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+}
+
+.scrollable-tabs-container ul.dragging {
+    scroll-behavior: auto;
+}
+
+.scrollable-tabs-container ul::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollable-tabs-container ul a {
+    text-decoration: none;
+    color: #000;
+    background: #fff;
+    padding: 4px 24px;
+    display: inline-block;
+    border-radius: 4px;
+    white-space: nowrap;
+    user-select: none !important;
+}
+
+.scrollable-tabs-container a.active {
+    background: #000;
+    color: #fff;
+}
+
+.scrollable-tabs-container ul.dragging a {
+    pointer-events: none;
+}

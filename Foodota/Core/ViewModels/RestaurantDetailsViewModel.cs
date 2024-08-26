@@ -12,7 +12,7 @@ public class RestaurantDetailsViewModel
 	public string LogoPath { get; set; } = null!;
 	public string Address { get; set; } = null!;
 	public IList<OpeningHour> OpeningHours { get; set; } = new List<OpeningHour>();
-	public ICollection<RestaurantCategory> RestaurantCategories { get; set; } = new List<RestaurantCategory>();
+	public ICollection<Category> Categories { get; set; } = new List<Category>();
 	public IList<string> WeekDays { get; set; } = new List<string>();
 
 }

@@ -45,15 +45,17 @@ public class RestaurantController : Controller
 		var restaurant = _context.Restaurants
 			.Include(r => r.OpeningHours)
 				.ThenInclude(o => o.WeekDay)
-			.Include(r => r.RestaurantCategories)
-				.ThenInclude(rc => rc.Category)
-				.ThenInclude(c => c.MenuItems)
 			.Where(r => r.Id == id)
 			.FirstOrDefault();
 
 		if (restaurant is null)
 			return NotFound();
 		var model = _mapper.Map<RestaurantDetailsViewModel>(restaurant);
+		model.Categories = _context.Categories
+			.Include(c => c.RestaurantCategories)
+				.ThenInclude(r => r.Restaurant)
+				.Where(c => c.RestaurantCategories.Any(rc => rc.RestaurantId == id))
+				.ToList();
 		model.WeekDays = _context.WeekDays.Select(w=>w.Name).ToList();
 		return View(model);
 	}
