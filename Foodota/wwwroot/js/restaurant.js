@@ -14,6 +14,18 @@ function OnSuccessSubmitCreate(restaurantId) {
 		});
 	});
 
+	$(".js-checkbox-opening-time").each(function () {
+		if (!$(this).is(":checked")) {
+			console.log($(this))
+			OpeningHours.push({
+				"WeekDayId": $(this).val(),
+				"From": '',
+				"To": '',
+				"RestaurantId": restaurantId
+			});
+		}
+	});
+
 	// Send opening hours to the server
 	$.ajax({
 		url: "/admin/Restaurant/AddOpeningHours",

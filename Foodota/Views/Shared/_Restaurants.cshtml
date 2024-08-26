@@ -1,56 +1,22 @@
 ﻿@model IEnumerable<Restaurant>
 
-
-@foreach (var restaurant in Model)
-{
-	
-<div class="align-self-normal col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2 p-2">
-	<div class="card h-100">
-		<img src="@restaurant.ImagePath" class="card-img-top" alt="...">
-		<div class="card-body d-flex flex-column">
-			<h5 class="card-title mb-4 fs-4 ">@restaurant.Name</h5>
-			<div class="card-categories d-flex gap-2 flex-wrap mb-3">
-				@if (!restaurant.RestaurantCategories.Any())
-				{
-					<span class="text-danger">no categories available</span>
-				}
-				else
-				{
-					@foreach (var category in restaurant.RestaurantCategories)
-					{
-						<a href="#" class="px-3 py-2 bg-light text-black rounded-1">@category.Category?.Name</a>
-					}
-				}
-
-			</div>
-			<div class="card-footer bg-white p-0 pt-3 mt-auto">
-				<div class="d-flex gap-3">
-					<a href="#">
-						<img src="@restaurant.LogoPath" width="50" />
-					</a>
-					<div>
-						<div class="opening-hours">
-
-							@foreach (var openingHour in restaurant.OpeningHours)
-							{
-								@if (openingHour.WeekDay.Name == DateTime.Now.DayOfWeek.ToString())
-								{
-									<div>
-										<i class="bi bi-clock-fill" style="color:green;"></i>
-										<span class="text-danger">@openingHour.From - @openingHour.To</span>
-									</div>
-								}
-							}
-						</div>
-
-						<div>
-							<i class="bi bi-geo-alt-fill" style="color:red;"></i>
-							<span class="text-dark">@restaurant.Address</span>
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="row px-2 py-4">
+	<img src="~/assets/images/top-banner_.png" />
+</div>
+<div class="row px-2">
+	<div class="food-category-widget">
+		<h5 class="fw-800">@Model.Count() Restaurants</h5>
+		<div class="bottom-dots  clearfix">
+			<span class="dot line-dot"></span>
+			<span class="dot"></span>
+			<span class="dot"></span>
+			<span class="dot"></span>
 		</div>
 	</div>
 </div>
-}
+<div class="row p-2 js-render-restaurants">
+	@foreach (var restaurant in Model)
+	{
+		<partial name="_RestaurantCard" model="restaurant" />
+	}
+</div>

@@ -32,10 +32,29 @@ public class RestaurantController : Controller
 
 		CategoryRestaurantsViewModel model = new()
 		{
+			SelectedCategory=id,
 			AllCategories = allCategories,
 			CategoryRestaurants = categoryRestaurants
 		};
 
+		return View(model);
+	}
+
+	public IActionResult Details(int id)
+	{
+		var restaurant = _context.Restaurants
+			.Include(r => r.OpeningHours)
+				.ThenInclude(o => o.WeekDay)
+			.Include(r => r.RestaurantCategories)
+				.ThenInclude(rc => rc.Category)
+				.ThenInclude(c => c.MenuItems)
+			.Where(r => r.Id == id)
+			.FirstOrDefault();
+
+		if (restaurant is null)
+			return NotFound();
+		var model = _mapper.Map<RestaurantDetailsViewModel>(restaurant);
+		model.WeekDays = _context.WeekDays.Select(w=>w.Name).ToList();
 		return View(model);
 	}
 

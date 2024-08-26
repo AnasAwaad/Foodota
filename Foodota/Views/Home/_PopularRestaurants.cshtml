@@ -13,8 +13,12 @@
 					<span class="dot"></span>
 				</div>
 			</div>
-			
-			<partial name="_Restaurants" model="Model" />
+			@foreach (var restaurant in Model)
+			{
+				<partial name="_RestaurantCard" model="restaurant" />
+
+			}
+
 		</div>
 
 	</div>

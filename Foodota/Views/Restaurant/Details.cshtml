@@ -1,0 +1,81 @@
+﻿@model RestaurantDetailsViewModel
+<header class="">
+	<div class="d-flex justify-content-between ">
+		<div>
+			<a class="logo" asp-controller="Home" asp-action="Index">
+				<img src="~/assets/images/logo.png" style="height:60px;" />
+			</a>
+		</div>
+		<div class="toggleMenu" onclick="toggleMenu();"></div>
+
+		<div class="navigation ">
+			<ul class="primary-list d-flex ">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+				</li>
+				@if (User.IsInRole(AppRoles.Admin))
+				{
+					<li>
+						<a class="text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
+					</li>
+				}
+			</ul>
+			<ul class="d-flex ms-0">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
+				</li>
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Register</a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+</header>
+
+<section class="restaurant-banner">
+	<div class="img-content">
+		<img src="@Model.ImagePath" alt="@Model.Name" />
+	</div>
+</section>
+<div class="restaurant-main">
+	<div class="d-none" id="restaurant-id">@Model.Id</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xxl-9 col-xl-9 col-sm-12 col-md-12 col-lg-8">
+				<div class="restaurant-info d-flex ">
+					<div class="restaurant-logo">
+						<img src="@Model.LogoPath" alt="" >
+					</div>
+					<div class=" pt-3">
+						<h2>@Model.Name</h2>
+						<p>
+							<i class="bi bi-geo-alt-fill" style="color:red;"></i>
+							@Model.Address
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="dropdown  col-3 d-flex align-items-end">
+				<button onclick="toggleDropDown()" class="dropbtn w-100">Working hours</button>
+				<div id="myDropdown" class="dropdown-content js-working-hours-content">
+					
+					@for (int i = 0; i < Model.WeekDays.Count(); i++)
+					{
+						<div class="d-flex justify-content-between">
+							<div class="@(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"js-restaurant-Today":Model.WeekDays[i])"> @(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"Today":Model.WeekDays[i])</div>
+							<div class="js-opening-hours-time">@(string.IsNullOrEmpty(Model.OpeningHours[i].From)?"Closed": $"{Model.OpeningHours[i].From} - {Model.OpeningHours[i].To}")</div>
+						</div>
+					}
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+@section Styles {
+	<link href="~/css/home_restaurant.css" rel="stylesheet" />
+}

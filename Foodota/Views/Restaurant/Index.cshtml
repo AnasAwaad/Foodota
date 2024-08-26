@@ -49,7 +49,7 @@
 			{
 				<div class="d-flex justify-content-between">
 					<label class="category-checkbox">
-						<input type="checkbox" name="categories" value="@category.Id" id="category-@category.Id">
+						<input type="checkbox" name="categories" @(category.Id == Model.SelectedCategory ? "checked" : "") value="@category.Id" id="category-@category.Id">
 						<span class="check"></span>
 						@category.Name
 					</label>
@@ -62,24 +62,9 @@
 
 		</div>
 	</aside>
-	<div class="col-sm-8 col-md-9 col-xl-10 bg-light" >
-		<div class="row px-2 py-4">
-			<img src="~/assets/images/top-banner_.png" />
-		</div>
-		<div class="row px-2">
-			<div class="food-category-widget">
-				<h5 class="fw-800">@Model.CategoryRestaurants.Count() Restaurants</h5>
-				<div class="bottom-dots  clearfix">
-					<span class="dot line-dot"></span>
-					<span class="dot"></span>
-					<span class="dot"></span>
-					<span class="dot"></span>
-				</div>
-			</div>
-		</div>
-		<div class="row p-2" id="main-content">
-			<partial name="_Restaurants" model="@Model.CategoryRestaurants"/>
-		</div>
+	<div class="col-sm-8 col-md-9 col-xl-10 bg-light" id="main-content">
+		
+		<partial name="_Restaurants" model="@Model.CategoryRestaurants" />
 
 	</div>
 </main>
@@ -93,24 +78,26 @@
 				var selectedCategories = $('input[type="checkbox"][name="categories"]:checked').map(function () {
 					return $(this).val()
 				}).get();
-				
+
 				// send ajax request to retrieve restaurants data
 				$.ajax({
-					url:"/Restaurant/GetFilteredData",
-					method:"post",
+					url: "/Restaurant/GetFilteredData",
+					method: "post",
 					data: {
 						CategoryIds: selectedCategories
 					},
 					success: function (res) {
 						$('#main-content').html(res);
-						if ($('#main-content').text().trim()==''){
-							$('#main-content').html(`<div class="alert alert-primary" role="alert">
+
+						if ($('.js-render-restaurants').text().trim() == '') {
+							$('.js-render-restaurants').html(`<div class="alert alert-primary" role="alert">
 								No restaurants available!
 							</div>`);
 						}
 					}
 				})
-			})
+			});
+			$('#category-')
 			
 		});
 
