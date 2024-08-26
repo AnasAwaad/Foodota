@@ -43,6 +43,7 @@ public class RestaurantController : Controller
 	public IActionResult Details(int id)
 	{
 		var restaurant = _context.Restaurants
+			.Include(r=>r.MenuItems)
 			.Include(r => r.OpeningHours)
 				.ThenInclude(o => o.WeekDay)
 			.Where(r => r.Id == id)
@@ -51,12 +52,14 @@ public class RestaurantController : Controller
 		if (restaurant is null)
 			return NotFound();
 		var model = _mapper.Map<RestaurantDetailsViewModel>(restaurant);
+
 		model.Categories = _context.Categories
 			.Include(c => c.RestaurantCategories)
 				.ThenInclude(r => r.Restaurant)
 				.Where(c => c.RestaurantCategories.Any(rc => rc.RestaurantId == id))
 				.ToList();
 		model.WeekDays = _context.WeekDays.Select(w=>w.Name).ToList();
+		model.MenuItems = restaurant.MenuItems;
 		return View(model);
 	}
 

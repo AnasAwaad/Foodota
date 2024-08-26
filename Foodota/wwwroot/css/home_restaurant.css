@@ -154,11 +154,10 @@
     color: #FFCC00;
 }
 
-/* category scroll in restaurant details */
+/* start category scroll in restaurant details */
 
 .scrollable-tabs-container {
     font-family: sans-serif;
-    background: #ffcc00;
     width: 100%;
     margin: 10px auto;
     border-radius: 4px;
@@ -166,20 +165,16 @@
     position: relative;
 }
 
-.scrollable-tabs-container svg {
-    width: 29px;
-    height: 29px;
-    cursor: pointer;
-    color: #fff;
-    padding: 8px;
-    border-radius: 50%;
-    pointer-events: auto;
-    background:#000;
-}
+    .scrollable-tabs-container svg {
+        width: 29px;
+        height: 29px;
+        cursor: pointer;
+        color: #231900;
+        padding: 8px;
+        pointer-events: auto;
+        background: #FC0;
+    }
 
-.scrollable-tabs-container svg:hover {
-    background: #333;
-}
 
 .scrollable-tabs-container .left-arrow,
 .scrollable-tabs-container .right-arrow {
@@ -224,16 +219,17 @@
     display: none;
 }
 
-.scrollable-tabs-container ul a {
-    text-decoration: none;
-    color: #000;
-    background: #fff;
-    padding: 4px 24px;
-    display: inline-block;
-    border-radius: 4px;
-    white-space: nowrap;
-    user-select: none !important;
-}
+    .scrollable-tabs-container ul a {
+        text-decoration: none;
+        color: #231900;
+        background: #f1f1f1;
+        padding: 10px 86px;
+        display: inline-block;
+        border-radius: 4px;
+        white-space: nowrap;
+        user-select: none !important;
+        font-size:16px;
+    }
 
 .scrollable-tabs-container a.active {
     background: #000;
@@ -243,3 +239,57 @@
 .scrollable-tabs-container ul.dragging a {
     pointer-events: none;
 }
+/* end category scroll in restaurant details */
+
+.category-line {
+    width: 100%;
+    height: 3px;
+    background: #f3f5ff;
+    position: relative;
+}
+
+    .category-line:before {
+        content:'';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 10%;
+        height: 3px;
+        background: #ffcc00;
+    }
+
+.menu-items .menu-item .menu-item-description {
+    color: #757575;
+    font-size: 15px;
+}
+
+.menu-item .order-count{
+    width:50px;
+    height:30px;
+}
+
+.menu-item .order-btn {
+    padding: 8px 36px;
+    background: #ffcc00;
+    display: block;
+    white-space: nowrap;
+    color: #000;
+    margin:0 15px;
+    border:0;
+    border-radius:4px;
+
+}
+
+    .menu-item .order-btn:hover {
+        background: #000;
+        color:#fff;
+    }
+
+.read-more-btn,
+.read-less-btn {
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #434242;
+}
+

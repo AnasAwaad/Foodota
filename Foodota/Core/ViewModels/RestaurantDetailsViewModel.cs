@@ -11,6 +11,7 @@ public class RestaurantDetailsViewModel
 	public string ImagePath { get; set; } = null!;
 	public string LogoPath { get; set; } = null!;
 	public string Address { get; set; } = null!;
+	public ICollection<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
 	public IList<OpeningHour> OpeningHours { get; set; } = new List<OpeningHour>();
 	public ICollection<Category> Categories { get; set; } = new List<Category>();
 	public IList<string> WeekDays { get; set; } = new List<string>();
