@@ -146,4 +146,26 @@
 }
 @section Scripts {
 	<script src="~/js/restaurant.js"></script>
+	<script>
+		$(function () {
+			$('.js-add-to-cart').each(function () {
+				$(this).on('click',function(){
+					var menuItemId = $(this).data('itemid');
+					var menuItemCount = $(this).parent().find('.order-count').val();
+					$.ajax({
+						url:"/ShoppingCart/AddToCart",
+						type:"post",
+						contentType: "application/json;charset=utf-8",
+						data: JSON.stringify({
+							menuItemId,
+							menuItemCount
+						}),
+						success: function (res) {
+							console.log(res)
+						}
+					})
+				})
+			})
+		})
+	</script>
 }

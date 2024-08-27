@@ -16,7 +16,6 @@ function OnSuccessSubmitCreate(restaurantId) {
 
 	$(".js-checkbox-opening-time").each(function () {
 		if (!$(this).is(":checked")) {
-			console.log($(this))
 			OpeningHours.push({
 				"WeekDayId": $(this).val(),
 				"From": '',

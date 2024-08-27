@@ -1,0 +1,22 @@
+﻿@model ShoppingCartViewModel
+<tr>
+	<td class="pb-5">
+		<div class="d-flex">
+			<img src="@Model.MenuItem.ImagePath" width="130" class="rounded-1 me-3" />
+			<div class="d-flex flex-column justify-content-between">
+				<div class="item-name fw-500 fs-5">@Model.MenuItem.Name</div>
+				<div class="item-category text-danger">@Model.MenuItem.Category!.Name</div>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="d-flex">
+			<div class="btn btn-primary js-decrease-amount" data-id="@Model.Id"> - </div>
+			<div class="js-count py-2 px-3">@Model.Count</div>
+			<div class="btn btn-primary js-increase-amount" data-id="@Model.Id"> + </div>
+		</div>
+
+	</td>
+	<td>$@Model.MenuItem.MainPrice.ToString(".00")</td>
+	<td>$@((Model.MenuItem.MainPrice * Model.Count).ToString(".00"))</td>
+</tr>
