@@ -56,8 +56,9 @@ public class RestaurantController : Controller
 		model.Categories = _context.Categories
 			.Include(c => c.RestaurantCategories)
 				.ThenInclude(r => r.Restaurant)
-				.Where(c => c.RestaurantCategories.Any(rc => rc.RestaurantId == id))
-				.ToList();
+			.Where(c => c.RestaurantCategories.Any(rc => rc.RestaurantId == id ))
+			.ToList();
+
 		model.WeekDays = _context.WeekDays.Select(w=>w.Name).ToList();
 		model.MenuItems = restaurant.MenuItems;
 		return View(model);
@@ -74,4 +75,16 @@ public class RestaurantController : Controller
 			.ToList();
 		return PartialView("_Restaurants", restautants);
 	}
+
+	[HttpPost]
+	public IActionResult GetCategoryItems([FromBody] RestaurantMenuItemsRequest model)
+	{
+		// When categoryId is 0, retrieve all items for the given restaurant
+		var items = model.categoryId == 0
+			? _context.MenuItems.Include(m => m.Category).Where(m => m.RestaurantId == model.restaurantId).ToList()
+			: _context.MenuItems.Include(m => m.Category).Where(i => i.CategoryId == model.categoryId && i.RestaurantId == model.restaurantId).ToList();
+
+		return PartialView("_MenuItemsList", items);
+	}
+
 }

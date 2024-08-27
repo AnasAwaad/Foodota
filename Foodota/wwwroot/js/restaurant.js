@@ -153,8 +153,36 @@ $(document).ready(function () {
 	
 	
 	/* End slice item description */
-	
 
+
+	// start render menu items
+	$('.js-categories').each(function () {
+		var category = $(this);
+		category.on('click', function () {
+			var selectedCategoryName = category.text(); // Get the category name
+			$.ajax({
+				url: "/Restaurant/GetCategoryItems",
+				contentType: "application/json;charset=utf-8",
+				type: "post",
+				data: JSON.stringify({
+					categoryId: category.data('categoryid'),
+					restaurantId: category.data('restaurantid')
+				}),
+				success: function (res) {
+					$('.js-render-menu-items').html(res);
+
+					// Create a temporary container to count the items
+					var tempContainer = $('<div>').html(res);
+					var itemCount = tempContainer.find('.menu-item').length;
+
+					// Update the category title with the item count
+					$('.js-category-title').text(selectedCategoryName + " (" + itemCount + ")");
+				}
+			})
+		});
+	});
+
+	// end render menu items
 
 });
 
@@ -183,8 +211,7 @@ const manageIcons = () => {
 	}
 	let maxScrollValue = tabsList.scrollWidth - tabsList.clientWidth;
 
-	console.log(tabsList.scrollWidth)
-	console.log(tabsList.clientWidth)
+	
 	if (tabsList.scrollLeft >= maxScrollValue) {
 		rightArrowContainer.classList.remove("active");
 	} else {

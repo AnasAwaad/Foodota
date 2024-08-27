@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MenuItem>
+
+@if (Model.Count() > 0)
+{
+	@foreach (var item in Model)
+	{
+		<div class="menu-item px-3 py-4">
+			<div class="d-flex justify-content-between flex-column flex-xl-row">
+				<div class="flex-grow-1 d-flex">
+					<div>
+						<img src="@item.ImagePath" width="100" class="rounded-1 me-3" />
+					</div>
+					<div class="item-info d-flex flex-column">
+						<h5 class="fs-5 fw-300">@item.Name</h5>
+						<div class="menu-item-description">
+							<span class="item-desc">@item.Description</span>
+						</div>
+						<div class="text-danger fw-400">$@item.MainPrice</div>
+					</div>
+				</div>
+				<div class="d-flex align-items-center flex-wrap justify-content-end">
+					<input type="number" class="order-count" />
+					<button type="button" class="order-btn">Order Now</button>
+				</div>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<div class="alert alert-danger px-3 py-4 my-4" role="alert">
+		No items available for this category
+	</div>
+}
