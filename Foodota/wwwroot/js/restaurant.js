@@ -54,6 +54,17 @@ function OnSuccessSubmitUpdate() {
 		});
 	});
 
+	$(".js-checkbox-opening-time").each(function () {
+		if (!$(this).is(":checked")) {
+			OpeningHours.push({
+				"WeekDayId": $(this).val(),
+				"From": '',
+				"To": '',
+				"RestaurantId": restaurantId
+			});
+		}
+	});
+
 	// Send opening hours to the server
 	$.ajax({
 		url: "/Admin/Restaurant/UpdateOpeningHours",

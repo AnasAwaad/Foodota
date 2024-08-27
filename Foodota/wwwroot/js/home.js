@@ -22,3 +22,13 @@ window.onclick = function (event) {
     }
 }
 
+$(function () {
+    $('.js-open-cart').on('click', function () {
+        console.log('click')
+        $('body').addClass('showCart');
+    });
+    $('.js-close').on('click', function () {
+        $('body').removeClass('showCart');
+    });
+    
+})
