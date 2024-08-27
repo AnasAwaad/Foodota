@@ -1,5 +1,10 @@
 ﻿@model ShoppingCartViewModel
 <tr>
+	<td>
+		<div class="js-remove-item remove-item" data-id="@Model.Id">
+			x
+		</div>
+	</td>
 	<td class="pb-5">
 		<div class="d-flex">
 			<img src="@Model.MenuItem.ImagePath" width="130" class="rounded-1 me-3" />
@@ -17,6 +22,6 @@
 		</div>
 
 	</td>
-	<td>$@Model.MenuItem.MainPrice.ToString(".00")</td>
+	<td class="js-item-price">$<span>@Model.MenuItem.MainPrice.ToString(".00")</span></td>
 	<td>$@((Model.MenuItem.MainPrice * Model.Count).ToString(".00"))</td>
 </tr>

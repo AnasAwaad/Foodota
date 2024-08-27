@@ -48,6 +48,16 @@ public class ShoppingCartController : Controller
 		return Ok("Item added successfully");
 	}
 
+	public IActionResult RemoveItem(int id)
+	{
+		var menuItem=_context.ShoppingCarts.Find(id);
+		if (menuItem is null)
+			return NotFound();
+		_context.ShoppingCarts.Remove(menuItem);
+		_context.SaveChanges();
+		return Ok();
+	}
+
 	public IActionResult IncreaseItem(int id)
 	{
 		var cartItem = _context.ShoppingCarts

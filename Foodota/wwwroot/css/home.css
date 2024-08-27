@@ -233,3 +233,16 @@ ul {
     background: #d3cfcf;
     margin: 30px 0;
 }
+
+.remove-item {
+    cursor: pointer;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    line-height: 1;
+    font-size:21px;
+}
+.remove-item:hover{
+    background-color:#d5d5d5;
+}
