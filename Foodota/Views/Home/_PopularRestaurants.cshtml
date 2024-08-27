@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Restaurant>
+
+<section class="restaurant-section py-120px ">
+	<div class="container">
+		<div class="row">
+			<div class="global-header col-12 m-auto text-center mb-5">
+				<div class="header-title text-">Top Restaurants</div>
+				<h3 class="header-content">Papular Restaurant</h3>
+				<div class="bottom-dots  clearfix">
+					<span class="dot line-dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+				</div>
+			</div>
+			@foreach (var restaurant in Model)
+			{
+				<partial name="_RestaurantCard" model="restaurant" />
+
+			}
+
+		</div>
+
+	</div>
+</section>

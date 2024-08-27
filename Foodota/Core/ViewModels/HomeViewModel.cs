@@ -4,5 +4,6 @@ namespace Foodota.Core.ViewModels;
 
 public class HomeViewModel
 {
-    public ICollection<Category>? Categories { get; set; }
+    public IEnumerable<Category>? Categories { get; set; }
+    public IEnumerable<Restaurant>? Restaurants { get; set; }
 }

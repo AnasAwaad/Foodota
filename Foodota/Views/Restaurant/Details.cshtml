@@ -1,0 +1,149 @@
+﻿@model RestaurantDetailsViewModel
+<header class="">
+	<div class="d-flex justify-content-between ">
+		<div>
+			<a class="logo" asp-controller="Home" asp-action="Index">
+				<img src="~/assets/images/logo.png" style="height:60px;" />
+			</a>
+		</div>
+		<div class="toggleMenu" onclick="toggleMenu();"></div>
+
+		<div class="navigation ">
+			<ul class="primary-list d-flex ">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+				</li>
+				@if (User.IsInRole(AppRoles.Admin))
+				{
+					<li>
+						<a class="text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
+					</li>
+				}
+			</ul>
+			<ul class="d-flex ms-0">
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
+				</li>
+				<li>
+					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Register</a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+</header>
+
+<section class="restaurant-banner">
+	<div class="img-content">
+		<img src="@Model.ImagePath" alt="@Model.Name" />
+	</div>
+</section>
+<div class="restaurant-main bg-light">
+	<div class="d-none" id="restaurant-id">@Model.Id</div>
+	<div>
+		<div class="container ">
+			<div class="row">
+				<div class="col-xxl-9 col-xl-9 col-sm-12 col-md-8 col-lg-8">
+					<div class="restaurant-info d-flex ">
+						<div class="restaurant-logo d-none d-md-block">
+							<img src="@Model.LogoPath" alt="">
+						</div>
+						<div class=" pt-3">
+							<h2>@Model.Name</h2>
+							<p>
+								<i class="bi bi-geo-alt-fill" style="color:red;"></i>
+								@Model.Address
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="dropdown  col-12 col-md-4 col-lg-4 col-xl-3 col-xxl-3 d-flex align-items-end">
+					<div class="position-relative w-100">
+						<button onclick="toggleDropDown()" class="dropbtn w-100">Working hours</button>
+						<div id="myDropdown" class="dropdown-content js-working-hours-content">
+
+							@for (int i = 0; i < Model.WeekDays.Count(); i++)
+							{
+								<div class="d-flex justify-content-between">
+									<div class="@(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString()?"js-restaurant-Today":Model.WeekDays[i])"> @(Model.WeekDays[i] == DateTime.Now.DayOfWeek.ToString() ? "Today" : Model.WeekDays[i])</div>
+									<div class="js-opening-hours-time">@(string.IsNullOrEmpty(Model.OpeningHours[i].From) ? "Closed" : $"{Model.OpeningHours[i].From} - {Model.OpeningHours[i].To}")</div>
+								</div>
+							}
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	<div class="my-5">
+		<div class="container ">
+			<div class="row ">
+
+				<div class="col-xxl-9 col-xl-8 col-lg-8 col-12 bg-white p-3 p-sm-4 ">
+					<div>
+						<h4>Categories</h4>
+						<div class="bottom-dots ">
+							<span class="dot line-dot"></span>
+							<span class="dot"></span>
+							<span class="dot"></span>
+							<span class="dot"></span>
+						</div>
+					</div>
+					<div class="mt-4">
+						<div class="scrollable-tabs-container">
+							<div class="left-arrow ">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+								</svg>
+							</div>
+							<ul>
+								<li>
+									<a class="active js-categories" data-categoryId="0" data-restaurantId="@Model.Id">All</a> 
+								</li>
+								@foreach (var item in Model.Categories)
+								{
+									<li>
+										<a class="js-categories" data-categoryId="@item.Id" data-restaurantId="@Model.Id">@item.Name</a>
+									</li>
+								}
+
+							</ul>
+							<div class="right-arrow active">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+								</svg>
+							</div>
+						</div>
+
+						<div class="category-info">
+							<h5 class="js-category-title">
+								All <span>@Model.MenuItems.Count</span>
+							</h5>
+							<div class="category-line"></div>
+						</div>
+						<div class="js-render-menu-items">
+							@* menu items will render here *@
+							<partial name="_MenuItemsList" model="Model.MenuItems" />
+						</div>
+
+
+					</div>
+					<div class="col-xxl-4 col-xl-4 col-lg-4 col-12"></div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Styles {
+	<link href="~/css/home_restaurant.css" rel="stylesheet" />
+}
+@section Scripts {
+	<script src="~/js/restaurant.js"></script>
+}

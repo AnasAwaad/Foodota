@@ -1,43 +1,11 @@
 ﻿@model HomeViewModel
-@using Foodota.Core.Consts
 @{
 	ViewData["Title"] = "Home Page";
 }
 
+
 <section class="home-banner">
-	<header class="container ">
-		<div class="d-flex justify-content-between">
-			<div>
-				<a class="logo" asp-controller="Home" asp-action="Index">
-					<img src="~/assets/images/logo.png" style="height:60px;" />
-				</a>
-			</div>
-			<div class="toggleMenu" onclick="toggleMenu();"></div>
-
-			<div class="navigation ">
-				<ul class="primary-list d-flex ">
-					<li>
-						<a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-					</li>
-					@if (User.IsInRole(AppRoles.Admin))
-					{
-						<li>
-							<a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
-						</li>
-					}
-				</ul>
-				<ul class="d-flex ms-0">
-					<li>
-						<a asp-area="" asp-controller="Home" asp-action="Index">Login</a>
-					</li>
-					<li>
-						<a asp-area="" asp-controller="Home" asp-action="Index">Register</a>
-					</li>
-				</ul>
-
-			</div>
-		</div>
-	</header>
+	<partial name="_HomeHeader"/>
 	<section class="container hero row">
 
 		<div class="d-flex justify-content-center align-items-center text-white">
@@ -54,3 +22,5 @@
 <partial name="_OurCategories" model="@Model.Categories" />
 
 
+<!-- Popular Restaurants-->
+<partial name="_PopularRestaurants" model="@Model.Restaurants" />

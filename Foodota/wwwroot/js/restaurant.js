@@ -14,6 +14,18 @@ function OnSuccessSubmitCreate(restaurantId) {
 		});
 	});
 
+	$(".js-checkbox-opening-time").each(function () {
+		if (!$(this).is(":checked")) {
+			console.log($(this))
+			OpeningHours.push({
+				"WeekDayId": $(this).val(),
+				"From": '',
+				"To": '',
+				"RestaurantId": restaurantId
+			});
+		}
+	});
+
 	// Send opening hours to the server
 	$.ajax({
 		url: "/admin/Restaurant/AddOpeningHours",
@@ -111,144 +123,144 @@ $(document).ready(function () {
 		});
 	}
 
+	const numberOfMaxChars = 20;
 
+	/* Start slice item description */
+	$('.item-desc').each(function () {
+		let $this = $(this);
+		let content = $this.text().trim();
+		
+		if (content.length > numberOfMaxChars) {
+			let displayText = content.slice(0, numberOfMaxChars);
+			let moreText = content.slice(numberOfMaxChars);
+
+			$this.html(`
+            ${displayText}<span class="read-more-btn">...Read more</span>
+            <span class="js-more-text d-none">${moreText}</span>
+            <span class="read-less-btn d-none">...Read less</span>
+        `);
+		}
+	});
+
+	/* Toggle read more/less functionality */
+	$('body').on('click', '.read-more-btn, .read-less-btn', function () {
+		let $this = $(this);
+		$this.toggleClass('d-none');
+		$this.siblings('.js-more-text, .read-less-btn, .read-more-btn').toggleClass('d-none');
+		$('.menu-item > div').toggleClass('flex-xl-column')
+
+	});
+	
+	
+	/* End slice item description */
+
+
+	// start render menu items
+	$('.js-categories').each(function () {
+		var category = $(this);
+		category.on('click', function () {
+			var selectedCategoryName = category.text(); // Get the category name
+			$.ajax({
+				url: "/Restaurant/GetCategoryItems",
+				contentType: "application/json;charset=utf-8",
+				type: "post",
+				data: JSON.stringify({
+					categoryId: category.data('categoryid'),
+					restaurantId: category.data('restaurantid')
+				}),
+				success: function (res) {
+					$('.js-render-menu-items').html(res);
+
+					// Create a temporary container to count the items
+					var tempContainer = $('<div>').html(res);
+					var itemCount = tempContainer.find('.menu-item').length;
+
+					// Update the category title with the item count
+					$('.js-category-title').text(selectedCategoryName + " (" + itemCount + ")");
+				}
+			})
+		});
+	});
+
+	// end render menu items
+
+});
+
+
+
+
+/*start scrollable tabs in restaurant details*/
+const tabs = document.querySelectorAll(".scrollable-tabs-container a");
+const rightArrow = document.querySelector(".scrollable-tabs-container .right-arrow svg");
+const leftArrow = document.querySelector(".scrollable-tabs-container .left-arrow svg");
+const tabsList = document.querySelector(".scrollable-tabs-container ul");
+const leftArrowContainer = document.querySelector(".scrollable-tabs-container .left-arrow");
+const rightArrowContainer = document.querySelector(".scrollable-tabs-container .right-arrow ");
+
+const removeAllActiveClasses = () => {
+	tabs.forEach((tab) => {
+		tab.classList.remove("active");
+	});
+};
+
+const manageIcons = () => {
+	if (tabsList.scrollLeft > 20) {
+		leftArrowContainer.classList.add("active");
+	} else {
+		leftArrowContainer.classList.remove("active");
+	}
+	let maxScrollValue = tabsList.scrollWidth - tabsList.clientWidth;
 
 	
+	if (tabsList.scrollLeft >= maxScrollValue) {
+		rightArrowContainer.classList.remove("active");
+	} else {
+		rightArrowContainer.classList.add("active");
+	}
+};
 
-
+tabs.forEach((tab) => {
+	tab.addEventListener("click", function (e) {
+		removeAllActiveClasses();
+		tab.classList.add("active");
+	});
 });
 
 
-
-
-"use strict";
-
-// Handle Datatable
-var KTDatatablesServerSide = function () {
-	// Shared variables
-	var table;
-	var dt;
-
-	// Private functions
-	var initDatatable = function () {
-		dt = $("#datatable").DataTable({
-			searchDelay: 500,
-			processing: true,
-			serverSide: true,
-			ajax: {
-				url: "/admin/Restaurant/GetRestaurants",
-				type: "POST"
-			},
-			columns: [
-				{
-					"name": "Name",
-					"className": "d-flex align-items-center ",
-					"render": function (data, type, row) {
-						return `
-										<div class="symbol symbol-50px overflow-hidden me-3">
-													<a href="/Admin/Restaurant/Update/${row.id}">
-												<div class="symbol-label h-75">
-													<img src="${(row.logoPath === null ? '/assets/images/blank-image.svg' : row.logoPath)}" alt="${row.name}" class="w-100">
-												</div>
-											</a>
-										</div>
-
-										<div class="d-flex flex-column">
-											<a href="/Admin/Restaurant/Update/${row.id}" class="text-primary mb-1">${row.name}</a>
-										</div>
-										`;
-					},
-					"max-width": "200px"
-				},
-				{ "data": "description", "name": "Description" },
-				{ "data": "address", "name": "Address" },
-				{
-					"name": "CreatedOn",
-					"render": function (data, type, row) {
-						return moment(row.createdOn).format("ll");
-					}
-				},
-				{
-					"data": "isActive",
-					"name": "IsActive",
-					"render": function (data, type, row) {
-						return `<span class=" badge badge-${row.isActive ? "success" : "danger"}">
-																${row.isActive ? "Available" : "Not Available"}
-															</span>`;
-					}
-				},
-				{
-					"orderable": false,
-					"render": function (data, type, row) {
-						return `
-									<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
-										Actions
-										<span class="svg-icon fs-5 m-0">
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<polygon points="0 0 24 0 24 24 0 24"></polygon>
-													<path d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z" fill="currentColor" fill-rule="nonzero" transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999)"></path>
-												</g>
-											</svg>
-										</span>
-									</a>
-									<!--begin::Menu-->
-									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<a href="/Admin/Restaurant/Update/${row.id}" class="menu-link px-3" data-kt-docs-table-filter="edit_row">
-												Edit
-											</a>
-										</div>
-										<!--end::Menu item-->
-
-										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<a href="#" class="menu-link px-3" data-kt-docs-table-filter="delete_row">
-												Delete
-											</a>
-										</div>
-										<!--end::Menu item-->
-									</div>
-									<!--end::Menu-->
-									`;
-					}
-
-				}
-			],
-
-		});
-
-		table = dt.$;
-
-		// Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
-		dt.on('draw', function () {
-			KTMenu.createInstances();
-		});
-	}
-
-	// Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
-	var handleSearchDatatable = function () {
-		const filterSearch = document.getElementById('dataTableSearch');
-		filterSearch.addEventListener('keyup', function (e) {
-			dt.search(e.target.value).draw();
-		});
-	}
-
-
-
-
-	// Public methods
-	return {
-		init: function () {
-			initDatatable();
-			handleSearchDatatable();
-		}
-	}
-}();
-
-// On document ready
-KTUtil.onDOMContentLoaded(function () {
-	KTDatatablesServerSide.init();
-
+rightArrow.addEventListener("click", function () {
+	tabsList.scrollLeft += 200;
+	manageIcons();
 });
+
+leftArrow.addEventListener("click", function () {
+	tabsList.scrollLeft -= 200;
+	manageIcons();
+});
+
+tabsList.addEventListener("scroll", manageIcons);
+
+let dragging = false;
+
+const drag = (e) => {
+	if (!dragging)
+		return;
+	tabsList.classList.add("dragging");
+	tabsList.scrollLeft -= e.movementX;
+}
+
+
+tabsList.addEventListener("mousedown", () => {
+	dragging = true;
+});
+
+tabsList.addEventListener("mousemove", drag);
+
+document.addEventListener("mouseup", () => {
+	dragging = false;
+	tabsList.classList.remove("dragging");
+});
+
+/*end scrollable tabs in restaurant details*/
+
+
+

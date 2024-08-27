@@ -1,7 +1,6 @@
-﻿@using Foodota.Areas.Admin.Models
-@model IEnumerable<Category>
+﻿@model IEnumerable<Category>
 
-<section class="category-section my-120px ">
+<section class="category-section py-120px ">
 	<div class="container">
 		<div class="row">
 			<div class="global-header col-12 m-auto text-center mb-5">
@@ -17,10 +16,10 @@
 
 			@foreach (var category in Model)
 			{
-				<div class="col col-md-6 col-lg-6 col-xl-3">
+				<div class="col-12 col-md-6 col-lg-6 col-xl-3">
 
 					<div class="category-card mb-5">
-						<a href="#" class="d-flex justify-content-center">
+						<a href="/Restaurant/Index/@category.Id" class="d-flex justify-content-center">
 							<img src="@category.ImagePath" class="category-image" />
 						</a>
 						<div class="category-content text-center">

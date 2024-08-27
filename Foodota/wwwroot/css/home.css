@@ -7,8 +7,11 @@
 
 body {
     font-family: 'poppins',sans-serif;
-    
 }
+
+
+
+/* start home banner section*/
 
 .home-banner {
     background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.4)), url('/assets/images/hero-image.png');
@@ -16,11 +19,13 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
-    height: 90vh;
+    height: 95vh;
+    position: relative;
 }
 
 header {
-    padding: 2em;
+    padding: 1.3em;
+    max-height:100px;
 }
 
 header a {
@@ -38,8 +43,8 @@ ul {
     padding: 0;
 }
 
-.hero{
-    height:calc(100% - 318px);
+.hero {
+    height: calc(100% - 318px);
 }
 
 .navigation {
@@ -53,31 +58,34 @@ ul {
     margin: 0 auto;
 }
 
-.wave-image{
-    position:absolute;
-    left:0;
-    bottom:92px;
-    width:100%;
-}
-.my-120px{
-    margin:120px 0;
+.wave-image {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
-.global-header{
-    position:relative;
+.py-120px {
+    padding: 120px 0;
+}
+/* end home banner section*/
+
+/* start global header */
+.global-header {
+    position: relative;
 }
 
 .global-header .header-title {
     color: #FFCC00;
-    text-transform:uppercase;
-    font-weight:700;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
 .global-header .header-content {
     color: #231900;
     font-weight: bold;
-    letter-spacing:1.5px;
-    font-size:34px;
+    letter-spacing: 1.5px;
+    font-size: 34px;
 }
 
 .global-header .bottom-dots {
@@ -85,6 +93,7 @@ ul {
     left: 48%;
     bottom: -19px;
 }
+
 .bottom-dots .dot.line-dot {
     border-right: 40px solid #FFCC00;
 }
@@ -99,25 +108,52 @@ ul {
     margin-right: 3px;
 }
 
+/* end global header */
+
+/* start category section */
+
 .category-card .category-content .category-title {
     font-size: 24px;
     margin-bottom: 5px;
 }
+
 .category-card .category-content .category-desc {
     font-size: 13px;
     color: #54595F;
 }
 
-.category-card .category-image{
-    height:200px;
-    width:100%;
+.category-card .category-image {
+    height: 200px;
+    width: 100%;
 }
+
+/* end category section */
+
+/* start restaurant section */
+
+.restaurant-section {
+    background-color: #f2f2f2;
+}
+
+    .restaurant-section .card-categories a {
+        color: #071c1f;
+        text-decoration: none;
+    }
+
+    .restaurant-section .card  .card-img-top {
+        max-height: 278px;
+        min-height: 278px;
+    }
+
+/* end restaurant section */
+
+
 
 @media (max-width:1000px) {
     .home-banner {
         background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('/assets/images/hero-image.png');
-        background-position:right;
-        background-size:cover;
+        background-position: right;
+        background-size: cover;
     }
 
     .toggleMenu {
@@ -133,8 +169,8 @@ ul {
         padding: 2em;
     }
 
-    .toggleMenu:hover{
-        cursor:pointer;
+    .toggleMenu:hover {
+        cursor: pointer;
     }
 
     .toggleMenu.active {
@@ -150,19 +186,19 @@ ul {
         opacity: 0;
     }
 
-        .navigation.active {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            transform: scale(1,1);
-            max-height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85));
-            z-index: 99;
-            opacity: 1;
-        }
+    .navigation.active {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        transform: scale(1,1);
+        max-height: 100%;
+        background: linear-gradient(rgba(0,0,0,0.85),rgba(0,0,0,0.85));
+        z-index: 99;
+        opacity: 1;
+    }
 
     .navigation ul {
         flex-direction: column;
