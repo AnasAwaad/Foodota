@@ -1,37 +1,4 @@
 ﻿@model RestaurantDetailsViewModel
-<header class="">
-	<div class="d-flex justify-content-between ">
-		<div>
-			<a class="logo" asp-controller="Home" asp-action="Index">
-				<img src="~/assets/images/logo.png" style="height:60px;" />
-			</a>
-		</div>
-		<div class="toggleMenu" onclick="toggleMenu();"></div>
-
-		<div class="navigation ">
-			<ul class="primary-list d-flex ">
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-				</li>
-				@if (User.IsInRole(AppRoles.Admin))
-				{
-					<li>
-						<a class="text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
-					</li>
-				}
-			</ul>
-			<ul class="d-flex ms-0">
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
-				</li>
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Register</a>
-				</li>
-			</ul>
-
-		</div>
-	</div>
-</header>
 
 <section class="restaurant-banner">
 	<div class="img-content">
@@ -150,6 +117,13 @@
 		$(function () {
 			$('.js-add-to-cart').each(function () {
 				$(this).on('click',function(){
+
+					if ($('#username').text() == '') {
+						var returnUrl = window.location.pathname;
+						window.location.href = "/identity/Account/Login?returnUrl=" + encodeURIComponent(returnUrl);
+						return;
+					}
+
 					var menuItemId = $(this).data('itemid');
 					var menuItemCount = $(this).parent().find('.order-count').val();
 					$.ajax({
@@ -162,6 +136,7 @@
 						}),
 						success: function (res) {
 							console.log(res)
+							$('#cart-count').text(+$('#cart-count').text() + 1)
 						}
 					})
 				})

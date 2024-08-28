@@ -1,8 +1,10 @@
 ﻿using Foodota.Areas.Admin.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Foodota.Controllers;
+[Authorize]
 public class ShoppingCartController : Controller
 {
 	private readonly ApplicationDbContext _context;
@@ -97,6 +99,12 @@ public class ShoppingCartController : Controller
 
 
 		return PartialView("_ShoppingCartItemRow", _mapper.Map<ShoppingCartViewModel>(cartItem));
+	}
+
+	public IActionResult GetTotalItemsInCart()
+	{
+		var count=_context.ShoppingCarts.Where(s=>s.ApplicationUserId==User.FindFirst(ClaimTypes.NameIdentifier)!.Value).Count();
+		return Json(new { count });
 	}
 
 

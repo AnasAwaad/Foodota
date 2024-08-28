@@ -5,7 +5,6 @@
 
 
 <section class="home-banner">
-	<partial name="_HomeHeader"/>
 	<section class="container hero row">
 
 		<div class="d-flex justify-content-center align-items-center text-white">
@@ -18,30 +17,6 @@
 	<img src="/assets/images/wave.svg" class="wave-image" />
 </section>
 
-<div class="cartTab">
-	<div class="d-flex justify-content-between">
-		<h1>Shopping Cart</h1>
-		<span class="d-flex align-items-center me-3 fs-3 fs-bold close js-close">x</span>
-	</div>
-	<div class="listCart">
-		<div class="item">
-			<div class="image">
-				<img src="/images/menuItem/7c02f9eb-c5fc-4b90-8f73-de245e1d740e.jpg" class="w-100"/>
-			</div>
-			<div class="name">Name</div>
-			<div class="totalPrice">$100</div>
-			<div class="quantity">
-				<span class="minus">-</span>
-				<span >1</span>
-				<span class="plus">+</span>
-			</div>
-		</div>
-	</div>
-	<div class="cart-btns">
-		<button class="close js-close">Close</button>
-		<button class="checkOut">CheckOut</button>
-	</div>
-</div>
 
 <!--Our Categories-->
 <partial name="_OurCategories" model="@Model.Categories" />

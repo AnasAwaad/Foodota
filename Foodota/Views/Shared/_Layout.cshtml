@@ -13,17 +13,58 @@
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
-	@RenderSection("Styles",false)
+	@RenderSection("Styles", false)
 </head>
-<body >
+<body>
 
 	<!-- Header-->
+	<partial name="_HomeHeader" />
 	@RenderBody()
 
+	<div class="cartTab">
+		<div class="d-flex justify-content-between">
+			<h1>Shopping Cart</h1>
+			<span class="d-flex align-items-center me-3 fs-3 fs-bold close js-close">x</span>
+		</div>
+		<div class="listCart">
+			<div class="item">
+				<div class="image">
+					<img src="/images/menuItem/7c02f9eb-c5fc-4b90-8f73-de245e1d740e.jpg" class="w-100" />
+				</div>
+				<div class="name">Name</div>
+				<div class="totalPrice">$100</div>
+				<div class="quantity">
+					<span class="minus">-</span>
+					<span>1</span>
+					<span class="plus">+</span>
+				</div>
+			</div>
+		</div>
+		<div class="cart-btns">
+			<button class="close js-close">Close</button>
+			<button class="checkOut">CheckOut</button>
+		</div>
+	</div>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/home.js"></script>
+	<script>
+		$(function () {
+			if($('#username').text() != '')
+				loadCartCount();
+			function loadCartCount() {
+
+				$.ajax({
+					url: "/ShoppingCart/GetTotalItemsInCart",
+					success: function (res) {
+						console.log(res)
+						$('#cart-count').text(res.count)
+					}
+				})
+			}
+		})
+	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
