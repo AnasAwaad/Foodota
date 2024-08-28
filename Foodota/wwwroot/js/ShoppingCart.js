@@ -31,7 +31,7 @@
                                 <img src="${item.menuItem.imagePath}" class="w-100" />
                             </div>
                             <div class="name">${item.menuItem.name}</div>
-                            <div class="totalPrice">$ ${item.menuItem.mainPrice}</div>
+                            <div class="totalPrice item-price-${item.id}">$ <span>${item.menuItem.mainPrice}</span></div>
                             <div class="quantity">
                                 <span class="minus js-decrease-amount" data-id="${item.id}">-</span>
                                 <span class="js-item-count">${item.count}</span>
@@ -91,7 +91,7 @@
                 loadCartCount();
                 loadShoppingCart();
 
-                const itemPrice = +btn.parents('tr').find('.js-item-price span').text();
+                const itemPrice = +$('.item-price-' + itemId).find('span').text();
                 updateTotalPrice(itemPrice);
                 console.log(res)
                 $('.item-row-'+itemId).replaceWith(res);
@@ -120,7 +120,8 @@
                 }
 
                 itemCountElement.text(currentCount - 1);
-                const itemPrice = +btn.parents('tr').find('.js-item-price span').text();
+
+                const itemPrice = +$('.item-price-' + itemId).find('span').text();
                 updateTotalPrice(-itemPrice);
 
                 $('item-row-'+itemId).replaceWith(res);
