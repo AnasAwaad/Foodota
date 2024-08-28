@@ -323,12 +323,13 @@ body.showCart .cartTab{
     grid-template-columns:1fr 1fr;
 }
 
-.cartTab .cart-btns button{
-    border:none;
-    background:#FFCC00;
-    font-weight:500;
-    cursor:pointer;
-}
+    .cartTab .cart-btns button,
+    .cartTab .cart-btns a {
+        border: none;
+        background: #FFCC00;
+        font-weight: 500;
+        cursor: pointer;
+    }
     .cartTab  span.close{
         cursor:pointer;
     }

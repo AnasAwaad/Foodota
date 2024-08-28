@@ -28,6 +28,17 @@ public class ShoppingCartController : Controller
 		return View(_mapper.Map<IEnumerable<ShoppingCartViewModel>>(shoppingCart));
 	}
 
+	public IActionResult GetAllItemsInCart()
+	{
+		var shoppingCart = _context.ShoppingCarts
+			.Include(s => s.MenuItem)
+			.Where(s => s.ApplicationUserId == User.FindFirst(ClaimTypes.NameIdentifier)!.Value)
+			.ToList();
+
+		var cart = _mapper.Map<IEnumerable<ShoppingCartViewModel>>(shoppingCart);
+		return Json(new { cart });
+	}
+
 	public IActionResult AddToCart([FromBody] AddMenuItemToCartRequest request)
 	{
 		var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;

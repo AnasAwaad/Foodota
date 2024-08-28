@@ -1,59 +1,151 @@
 ﻿$(function () {
-	var totalPrice = $('#totalPrice span');
+    const totalPrice = $('#totalPrice span');
 
-	$('table').on('click', '.js-increase-amount', function () {
-		var btn = $(this);
-		$.ajax({
-			url: "ShoppingCart/IncreaseItem/" + $(this).data('id'),
-			success: function (res) {
+    // Reusable function to handle cart updates
+    function updateCartItemCount(amount) {
+        $('#cart-count').text((i, oldText) => +oldText + amount);
+    }
 
-				var itemPrice = btn.parents('tr').find('.js-item-price span').text();
+    function updateTotalPrice(amount) {
+        totalPrice.text((i, oldText) => +oldText + amount);
+    }
 
-				totalPrice.text(+totalPrice.text() + +itemPrice);
+    function loadCartCount() {
+        $.ajax({
+            url: "/ShoppingCart/GetTotalItemsInCart",
+            success: function (res) {
+                $('#cart-count').text(res.count);
+            },
+            error: function () {
+                console.error("Failed to load cart count");
+            }
+        });
+    }
 
-				btn.parents('tr').replaceWith(res);
-			}
-		})
-	})
+    function loadShoppingCart() {
+        $.ajax({
+            url: "/ShoppingCart/GetAllItemsInCart",
+            success: function (res) {
+                res.cart.forEach(item => {
+                    $('.listCart').append(`
+                        <div class="item">
+                            <div class="image">
+                                <img src="${item.menuItem.imagePath}" class="w-100" />
+                            </div>
+                            <div class="name">${item.menuItem.name}</div>
+                            <div class="totalPrice">$ ${item.menuItem.mainPrice}</div>
+                            <div class="quantity">
+                                <span class="minus js-decrease-amount" data-id="${item.id}">-</span>
+                                <span class="js-item-count">${item.count}</span>
+                                <span class="plus js-increase-amount" data-id="${item.id}">+</span>
+                            </div>
+                        </div>
+                    `);
+                });
+            },
+            error: function () {
+                console.error("Failed to load shopping cart");
+            }
+        });
+    }
 
-	$('table').on('click', '.js-decrease-amount', function () {
-		var btn = $(this);
-		if (btn.parent().find('.js-count').text() == 1) {
-			btn.parents('tr').fadeOut();
-			setTimeout(() => {
-				btn.parents('tr').remove();
+    // Event delegation for dynamically added elements
+    $('body').on('click', '.js-add-to-cart', function () {
+        if ($('#username').text() === '') {
+            const returnUrl = window.location.pathname;
+            window.location.href = "/identity/Account/Login?returnUrl=" + encodeURIComponent(returnUrl);
+            return;
+        }
 
-			}, 500)
-		}
-		$.ajax({
-			url: "ShoppingCart/DecreaseItem/" + $(this).data('id'),
-			success: function (res) {
-				var itemPrice = btn.parents('tr').find('.js-item-price span').text();
+        const menuItemId = $(this).data('itemid');
+        const menuItemCount = $(this).parent().find('.order-count').val();
 
-				totalPrice.text(+totalPrice.text() - +itemPrice);
+        $.ajax({
+            url: "/ShoppingCart/AddToCart",
+            type: "post",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ menuItemId, menuItemCount }),
+            success: function (res) {
+                console.log(res);
+                updateCartItemCount(1);
+            },
+            error: function () {
+                console.error("Failed to add item to cart");
+            }
+        });
+    });
 
-				btn.parents('tr').replaceWith(res);
-			}
-		})
-	})
+    $('body').on('click', '.js-increase-amount', function () {
+        const btn = $(this);
+        const itemId = btn.data('id');
 
-	$('.js-remove-item').on('click', function () {
-		var btn = $(this);
+        $.ajax({
+            url: `/ShoppingCart/IncreaseItem/${itemId}`,
+            success: function (res) {
+                const itemCountElement = btn.prev('.js-item-count');
+                itemCountElement.text(+itemCountElement.text() + 1);
 
-		$(this).parents('tr').fadeOut();
-		setTimeout(() => {
-			btn.parents('tr').remove();
-		}, 500)
+                const itemPrice = +btn.parents('tr').find('.js-item-price span').text();
+                updateTotalPrice(itemPrice);
+                btn.parents('tr').replaceWith(res);
+            },
+            error: function () {
+                console.error("Failed to increase item amount");
+            }
+        });
+    });
 
-		$.ajax({
-			url: "ShoppingCart/RemoveItem/" + $(this).data('id'),
-			success: function (res) {
-				var itemPrice = btn.parents('tr').find('.js-item-price span').text();
-				var itemCount = btn.parents('tr').find('.js-count').text();
-				console.log(itemCount)
-				totalPrice.text(+totalPrice.text() - (+itemPrice * +itemCount));
-				console.log("removed successfully");
-			}
-		})
-	})
+    $('body').on('click', '.js-decrease-amount', function () {
+        const btn = $(this);
+        const itemId = btn.data('id');
+
+        $.ajax({
+            url: `/ShoppingCart/DecreaseItem/${itemId}`,
+            success: function (res) {
+                const itemCountElement = btn.next('.js-item-count');
+                const currentCount = +itemCountElement.text();
+
+                if (currentCount === 1) {
+                    btn.parents('tr').fadeOut(() => $(this).remove());
+                }
+
+                itemCountElement.text(currentCount - 1);
+
+                const itemPrice = +btn.parents('tr').find('.js-item-price span').text();
+                updateTotalPrice(-itemPrice);
+
+                btn.parents('tr').replaceWith(res);
+            },
+            error: function () {
+                console.error("Failed to decrease item amount");
+            }
+        });
+    });
+
+    $('body').on('click', '.js-remove-item', function () {
+        const btn = $(this);
+        const itemId = btn.data('id');
+
+        btn.parents('tr').fadeOut();
+
+        $.ajax({
+            url: `/ShoppingCart/RemoveItem/${itemId}`,
+            success: function (res) {
+                const itemPrice = +btn.parents('tr').find('.js-item-price span').text();
+                const itemCount = +btn.parents('tr').find('.js-count').text();
+                updateTotalPrice(-(itemPrice * itemCount));
+                btn.parents('tr').remove();
+                console.log("Item removed successfully");
+            },
+            error: function () {
+                console.error("Failed to remove item from cart");
+            }
+        });
+    });
+
+    // Load cart details if the user is logged in
+    if ($('#username').text() !== '') {
+        loadCartCount();
+        loadShoppingCart();
+    }
 });

@@ -7,43 +7,9 @@
 	}
 }
 
-<header class="">
-	<div class="d-flex justify-content-between ">
-		<div>
-			<a class="logo" asp-controller="Home" asp-action="Index">
-				<img src="~/assets/images/logo.png" style="height:60px;" />
-			</a>
-		</div>
-		<div class="toggleMenu" onclick="toggleMenu();"></div>
-
-		<div class="navigation ">
-			<ul class="primary-list d-flex ">
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-				</li>
-				@if (User.IsInRole(AppRoles.Admin))
-				{
-					<li>
-						<a class="text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
-					</li>
-				}
-			</ul>
-			<ul class="d-flex ms-0">
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Login</a>
-				</li>
-				<li>
-					<a class="text-dark" asp-area="" asp-controller="Home" asp-action="Index">Register</a>
-				</li>
-			</ul>
-
-		</div>
-	</div>
-</header>
-
 <section class="container">
 	<div class="row">
-		<div class="col-12 col-md-12 col-xl-8 bg-white">
+		<div class="col-12  bg-white">
 			<div class="d-flex justify-content-between align-items-center">
 				<h2 class="">Shopping Cart</h2>
 				<span class="fw-bold fs-5">@Model.Count() Items</span>
@@ -67,11 +33,11 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="col-12 col-md-12 col-xl-4 bg-light">
-			<h3 class="pt-2">Order Summary</h3>
+		<div class="col-12 bg-light">
+			<h4 class="pt-2">Order Summary</h4>
 			<div class="seperator"></div>
-			<div class="d-flex justify-content-between align-items-center">
-				<div class="fw-bold fs-5">Total</div>
+			<div class="d-flex justify-content-between align-items-center mb-2">
+				<div class="fw-bold fs-6">Total</div>
 				<div class="fw-bold" id="totalPrice">$<span>@totalPrice</span></div>
 			</div>
 		</div>

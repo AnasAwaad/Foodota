@@ -27,42 +27,20 @@
 			<span class="d-flex align-items-center me-3 fs-3 fs-bold close js-close">x</span>
 		</div>
 		<div class="listCart">
-			<div class="item">
-				<div class="image">
-					<img src="/images/menuItem/7c02f9eb-c5fc-4b90-8f73-de245e1d740e.jpg" class="w-100" />
-				</div>
-				<div class="name">Name</div>
-				<div class="totalPrice">$100</div>
-				<div class="quantity">
-					<span class="minus">-</span>
-					<span>1</span>
-					<span class="plus">+</span>
-				</div>
-			</div>
 		</div>
 		<div class="cart-btns">
 			<button class="close js-close">Close</button>
-			<button class="checkOut">CheckOut</button>
+			<a class="checkOut d-flex justify-content-center align-items-center text-dark text-decoration-none" href="/shoppingCart/index">Show Details</a>
 		</div>
 	</div>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/home.js"></script>
+	<script src="~/js/shoppingcart.js"></script>
 	<script>
 		$(function () {
-			if($('#username').text() != '')
-				loadCartCount();
-			function loadCartCount() {
-
-				$.ajax({
-					url: "/ShoppingCart/GetTotalItemsInCart",
-					success: function (res) {
-						console.log(res)
-						$('#cart-count').text(res.count)
-					}
-				})
-			}
+			
 		})
 	</script>
 	@await RenderSectionAsync("Scripts", required: false)
