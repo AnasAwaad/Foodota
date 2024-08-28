@@ -1,7 +1,5 @@
 ﻿using Foodota.Areas.Admin.Data;
-using Foodota.Areas.Admin.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Foodota.Controllers;
 public class RestaurantController : Controller

@@ -23,5 +23,8 @@ public class DomainProfile : Profile
 		CreateMap<Restaurant, RestaurantOpeningHourViewModel>();
 		CreateMap<Restaurant, RestaurantDetailsViewModel>();
 			//.ForMember(dest => dest.From, opt => opt.MapFrom(src => src.OpeningHours.Select(o=>o.From));
+
+		// Shopping cart
+		CreateMap<ShoppingCart,ShoppingCartViewModel>();
 	}
 }

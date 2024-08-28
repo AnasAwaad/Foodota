@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ShoppingCartViewModel>
+@{
+	var totalPrice=0;
+	foreach (var item in Model)
+	{
+		totalPrice += (item.MenuItem.MainPrice * item.Count);	
+	}
+}
+
+<section class="container">
+	<div class="row">
+		<div class="col-12  bg-white">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2 class="">Shopping Cart</h2>
+				<span class="fw-bold fs-5">@Model.Count() Items</span>
+			</div>
+			<div class="seperator"></div>
+			<table class="table shopping-cart-table table-borderless">
+				<thead >
+					<tr>
+						<th></th>
+						<th>Item Details</th>
+						<th>Quantity</th>
+						<th>Price</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<partial name="_ShoppingCartItemRow" model="item"/>
+					}
+				</tbody>
+			</table>
+		</div>
+		<div class="col-12 bg-light">
+			<h4 class="pt-2">Order Summary</h4>
+			<div class="seperator"></div>
+			<div class="d-flex justify-content-between align-items-center mb-2">
+				<div class="fw-bold fs-6">Total</div>
+				<div class="fw-bold" id="totalPrice">$<span>@totalPrice</span></div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -21,5 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OpeningHour> OpeningHours { get; set; }
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<RestaurantCategory> RestaurantCategories { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<WeekDay> WeekDays { get; set; }
 }
